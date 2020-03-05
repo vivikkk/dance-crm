@@ -1,10 +1,11 @@
 <template lang="pug">
-  v-container
-    h1 Hello
+v-app
+  v-content
+    slot
 </template>
 
 <script>
 export default {
-  name: 'Home'
+  name: 'SimpleLayout'
 }
 </script>

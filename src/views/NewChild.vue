@@ -1,10 +1,10 @@
 <template lang="pug">
   v-container
-    h1 Hello
+    h1 New child
 </template>
 
 <script>
 export default {
-  name: 'Home'
+  name: 'NewChild'
 }
 </script>
