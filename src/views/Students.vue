@@ -1,12 +1,18 @@
 <template lang="pug">
-v-container(fluid)
+v-container
+  v-row
+    v-col
+      h1 Ученики и их родители
+      v-switch(
+        v-model="showAllColumns"
+        label="Показать все колонки"
+      )
   v-row(
     align="center"
     justify="center"
   )
     v-col(
         cols="12"
-        lg="10"
       )
       v-card
         v-card-title
@@ -18,32 +24,60 @@ v-container(fluid)
             hide-details
           )
         v-data-table(
-          :headers="headers"
+          :headers="computedHeaders"
+          :fixed-header="true"
           :items="students"
           :search="search"
+          align="start"
         )
           template(#item.name="{ value }")
-            strong {{value}}
+            strong {{ value }}
+
           template(#item.dateOfBirthday="{ value }")
-            div {{value}}
-          template(#item.parentsNames="{ value }")
-            div(v-for="item in value") {{ item }}
-          template(#item.parentsPhones="{ value }")
-            div(v-for="item in value")
-              a(:href="`callto:${item}`") {{ item }}
+            div {{ value }}
+
+          template(#item.parents="{ value }")
+            .mt-2.mb-2(
+              v-for="(val, key) in value"
+              v-if="val"
+            )
+              strong.mr-1 {{ getGlobalVars(key) }}:
+              span {{ val }}
+
+          template(#item.phones="{ value }")
+            .mt-2.mb-2(
+              v-for="(val, key) in value"
+              v-if="val"
+            )
+              strong.mr-1 {{ getGlobalVars(key) }}:
+              a(:href="`callto:${val}`") {{ val }}
+
           template(#item.school="{ value }")
-            div {{value}}
-          template(#item.parentsAdress="{ value }")
-            div {{value}}
-          template(#item.studentAdress="{ value }")
-            div {{value}}
+            span {{ value }}
+
+          template(#item.class="{ value }")
+            span {{ value }}
+
+          template(#item.adress="{ value }")
+            .mt-2.mb-2(
+              v-for="(val, key) in value"
+              v-if="val"
+            )
+              strong.mr-1 {{ getGlobalVars(key) }}:
+              span {{ val }}
+
+          template(#item.group="{ value }")
+            div {{ value }}
+
           template(#item.action="{ item }")
             v-icon(
               medium
               class="mr-2"
+              @click=""
             ) mdi-pencil
             v-icon(
               medium
+              @click=""
             ) mdi-delete
 
   v-btn(
@@ -65,44 +99,56 @@ export default {
   data () {
     return {
       search: '',
+      showAllColumns: false,
       headers: [
         {
           text: 'ФИО',
           align: 'start',
-          filterable: false,
-          value: 'name'
+          value: 'name',
+          hideByDefault: false
         },
         {
-          text: 'Год рождения',
-          value: 'dateOfBirthday'
+          text: 'Дата рождения',
+          value: 'dateOfBirthday',
+          hideByDefault: false
+        },
+        {
+          text: 'Группа',
+          value: 'group',
+          hideByDefault: false
         },
         {
           text: 'Школа',
-          value: 'school'
+          value: 'school',
+          hideByDefault: true
         },
         {
-          text: 'Адрес ребенка',
-          value: 'studentAdress',
+          text: 'Класс',
+          value: 'class',
+          hideByDefault: false
+        },
+        {
+          text: 'Адрес',
+          value: 'adress',
+          hideByDefault: true,
           sortable: false
         },
         {
           text: 'Родители',
-          value: 'parentsNames',
+          value: 'parents',
+          hideByDefault: false,
           sortable: false
         },
         {
-          text: 'Контакты родителей',
-          value: 'parentsPhones',
-          sortable: false
-        },
-        {
-          text: 'Адрес родителей',
-          value: 'parentsAdress',
+          text: 'Контакты',
+          value: 'phones',
+          hideByDefault: false,
           sortable: false
         },
         {
           text: 'Управление',
           value: 'action',
+          hideByDefault: false,
           sortable: false
         }
       ]
@@ -112,6 +158,27 @@ export default {
   computed: {
     students () {
       return this.$store.getters.students
+    },
+    computedHeaders () {
+      return this.showAllColumns ? this.headers : this.headers.filter(header => !header.hideByDefault)
+    }
+  },
+
+  /**
+   * TODO: global vars
+   */
+
+  methods: {
+    getGlobalVars (key) {
+      const keys = {
+        student: 'Ребенок',
+        parents: 'Родители',
+        mother: 'Мама',
+        father: 'Папа',
+        grandMother: 'Бабушка'
+      }
+
+      return keys[key]
     }
   }
 }
@@ -121,5 +188,8 @@ export default {
 .btn {
   right: 32px !important;
   bottom: 32px !important;
+}
+span {
+  white-space: nowrap;
 }
 </style>

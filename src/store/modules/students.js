@@ -2,23 +2,47 @@ export default {
   state: [
     {
       name: 'Ольга Николаевна Мухтарова',
-      sex: 0,
       dateOfBirthday: 1268239325,
+      group: 'Старшая',
       school: 'МКОУ СОШ №5',
-      studentAdress: 'Парковая 1-24',
-      parentsAdress: 'Парковая 1-24',
-      parentsNames: ['Светлана Ивановна Мухтарова', 'Светлан Иванович Мухтаров'],
-      parentsPhones: ['+79205645332', '+79205437632']
+      class: 10,
+      adress: {
+        student: 'Парковая 1-24',
+        parents: ''
+      },
+      parents: {
+        mother: 'Светлана Ивановна Мухтарова',
+        father: 'Светлан Иванович Мухтаров',
+        grandMother: 'Клавдия Ивановна Мухтарова'
+      },
+      phones: {
+        student: '+79201111111',
+        mother: '+79205645332',
+        father: '+79205645432',
+        grandMother: ''
+      }
     },
     {
       name: 'Василиса Игоревна Твердолобова',
-      sex: 0,
       dateOfBirthday: 1236012125,
-      school: 'МКОУ-Гимназия №6',
-      studentAdress: 'Первомайская, 23 а-3',
-      parentsAdress: 'Парковая 1-24',
-      parentsNames: ['Кольбас Сергеевич Твердолобов'],
-      parentsPhones: ['+79275111332']
+      group: 'Старшая',
+      school: 'МКОУ Гимназия №6',
+      class: 8,
+      adress: {
+        student: 'Первомайская, 23 а-3',
+        parents: 'Бессолова, 3-6'
+      },
+      parents: {
+        mother: '',
+        father: 'Кольбас Сергеевич Твердолобов',
+        grandMother: ''
+      },
+      phones: {
+        student: '+79202222222',
+        mother: '+79275111332',
+        father: '',
+        grandMother: ''
+      }
     }
   ],
   mutations: {},
