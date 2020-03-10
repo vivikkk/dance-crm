@@ -11,6 +11,7 @@
         cols="12"
         sm="8"
         md="6"
+        lg="4"
       )
         v-card
           v-toolbar(

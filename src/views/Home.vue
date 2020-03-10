@@ -1,6 +1,11 @@
 <template lang="pug">
-  v-container
-    h1 Hello
+v-container
+  v-row
+    v-col
+      ul
+        li Календарь событий
+        li Кто отсутсвовал в таблице на последнем занятии
+        li Ближайшее ДР
 </template>
 
 <script>

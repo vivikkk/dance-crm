@@ -23,7 +23,7 @@ v-app
         @click="drawer = !drawer"
       )
       v-toolbar-title
-        router-link.cursor(to="/" tag="span") DanceCrm
+        router-link(to="/" tag="span") DanceCrm
 
       v-spacer
 
@@ -48,8 +48,8 @@ export default {
   data: () => ({
     drawer: false,
     links: [
-      { title: 'Логин', icon: 'mdi-lock', url: '/login' },
-      { title: 'Новый ученик', icon: 'mdi-face', url: '/new-child' }
+      { title: 'Добавить событие', icon: 'mdi-calendar-plus', url: '/new-event' },
+      { title: 'Ученики', icon: 'mdi-face', url: '/students' }
     ]
   })
 }
