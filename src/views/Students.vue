@@ -1,5 +1,25 @@
 <template lang="pug">
 v-container
+  v-dialog(
+    v-model="dialog"
+    max-width="400px"
+  )
+    v-card
+      v-card-title(
+        class="headline"
+      ) Удалить участника
+      v-card-text Удаление произойдет НАВСЕГДА =(
+      v-card-actions
+        v-spacer
+        v-btn(
+          text
+          @click="dialog = false"
+        ) Отмена
+        v-btn(
+          color="red"
+          text
+          @click="dialog = false"
+        ) Удалить
   v-row
     v-col
       h1 Ученики и их родители
@@ -12,8 +32,8 @@ v-container
     justify="center"
   )
     v-col(
-        cols="12"
-      )
+      cols="12"
+    )
       v-card
         v-card-title
           v-text-field(
@@ -23,6 +43,7 @@ v-container
             single-line
             hide-details
           )
+
         v-data-table(
           :headers="computedHeaders"
           :fixed-header="true"
@@ -77,7 +98,7 @@ v-container
             ) mdi-pencil
             v-icon(
               medium
-              @click=""
+              @click="deleteItem(item)"
             ) mdi-delete
 
   v-btn(
@@ -100,6 +121,7 @@ export default {
     return {
       search: '',
       showAllColumns: false,
+      dialog: false,
       headers: [
         {
           text: 'ФИО',
@@ -171,7 +193,7 @@ export default {
   methods: {
     getGlobalVars (key) {
       const keys = {
-        student: 'Ребенок',
+        student: 'Ученик',
         parents: 'Родители',
         mother: 'Мама',
         father: 'Папа',
@@ -179,6 +201,11 @@ export default {
       }
 
       return keys[key]
+    },
+
+    deleteItem (item) {
+      this.dialog = true
+      console.log(item)
     }
   }
 }

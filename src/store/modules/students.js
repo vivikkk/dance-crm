@@ -1,4 +1,7 @@
 export default {
+  /**
+   * TODO: timestamp filter
+   */
   state: [
     {
       name: 'Ольга Николаевна Мухтарова',
