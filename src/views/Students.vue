@@ -2,24 +2,18 @@
 v-container
   v-dialog(
     v-model="dialog"
-    max-width="400px"
+    :max-width="`${this.isEditModal ? '800px' : '400px'}`"
   )
+    // TODO: declination
     v-card
       v-card-title(
         class="headline"
-      ) Удалить участника
-      v-card-text Удаление произойдет НАВСЕГДА =(
-      v-card-actions
-        v-spacer
-        v-btn(
-          text
-          @click="dialog = false"
-        ) Отмена
-        v-btn(
-          color="red"
-          text
-          @click="dialog = false"
-        ) Удалить
+      ) {{ formTitle }}
+      template(v-if="!isEditModal")
+        DeleteModal(studentName="Elena")
+      template(v-else)
+        EditModal
+
   v-row
     v-col
       h1 Ученики и их родители
@@ -76,7 +70,7 @@ v-container
           template(#item.school="{ value }")
             span {{ value }}
 
-          template(#item.class="{ value }")
+          template(#item.classStudy="{ value }")
             span {{ value }}
 
           template(#item.adress="{ value }")
@@ -94,7 +88,7 @@ v-container
             v-icon(
               medium
               class="mr-2"
-              @click=""
+              @click="editItem(item)"
             ) mdi-pencil
             v-icon(
               medium
@@ -114,14 +108,38 @@ v-container
 </template>
 
 <script>
+import DeleteModal from '@/components/DeleteUserModal'
+import EditModal from '@/components/EditUserModal'
+
+class Student {
+  constructor ({ name, dateOfBirthday, group, school, classStudy, adress, parents, phones }) {
+    this.name = name
+    this.dateOfBirthday = dateOfBirthday
+    this.group = group
+    this.school = school
+    this.classStudy = classStudy
+    this.adress = adress
+    this.parents = parents
+    this.phones = phones
+  }
+}
+
 export default {
   name: 'Students',
 
+  components: {
+    DeleteModal,
+    EditModal
+  },
+
   data () {
     return {
+      dialog: false,
+      isEditModal: false,
+      currentStudent: null,
+      currentStudentName: '',
       search: '',
       showAllColumns: false,
-      dialog: false,
       headers: [
         {
           text: 'ФИО',
@@ -146,7 +164,7 @@ export default {
         },
         {
           text: 'Класс',
-          value: 'class',
+          value: 'classStudy',
           hideByDefault: false
         },
         {
@@ -183,13 +201,13 @@ export default {
     },
     computedHeaders () {
       return this.showAllColumns ? this.headers : this.headers.filter(header => !header.hideByDefault)
+    },
+    formTitle () {
+      return this.isEditModal ? 'Редактирование профиля' : 'Внимание!'
     }
   },
 
-  /**
-   * TODO: global vars
-   */
-
+  // TODO:: global vars
   methods: {
     getGlobalVars (key) {
       const keys = {
@@ -202,10 +220,16 @@ export default {
 
       return keys[key]
     },
-
-    deleteItem (item) {
+    editItem (item) {
+      this.currentStudent = new Student({ ...item })
+      this.isEditModal = true
       this.dialog = true
-      console.log(item)
+    },
+    deleteItem (item) {
+      this.currentStudent = new Student({ ...item })
+      this.currentStudentName = this.currentStudent.name
+      this.isEditModal = false
+      this.dialog = true
     }
   }
 }
