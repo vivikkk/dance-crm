@@ -9,10 +9,12 @@ v-container
       v-card-title(
         class="headline"
       ) {{ formTitle }}
-      template(v-if="!isEditModal")
-        DeleteModal(studentName="Elena")
-      template(v-else)
-        EditModal
+      component(
+        :is="modal"
+        :student="currentStudentName"
+        @cancel="dialog = false"
+        @delete="deleteStudent"
+      )
 
   v-row
     v-col
@@ -28,72 +30,12 @@ v-container
     v-col(
       cols="12"
     )
-      v-card
-        v-card-title
-          v-text-field(
-            v-model="search"
-            prepend-inner-icon="mdi-account-search"
-            label="Поиск"
-            single-line
-            hide-details
-          )
-
-        v-data-table(
-          :headers="computedHeaders"
-          :fixed-header="true"
-          :items="students"
-          :search="search"
-          align="start"
-        )
-          template(#item.name="{ value }")
-            strong {{ value }}
-
-          template(#item.dateOfBirthday="{ value }")
-            div {{ value }}
-
-          template(#item.parents="{ value }")
-            .mt-2.mb-2(
-              v-for="(val, key) in value"
-              v-if="val"
-            )
-              strong.mr-1 {{ getGlobalVars(key) }}:
-              span {{ val }}
-
-          template(#item.phones="{ value }")
-            .mt-2.mb-2(
-              v-for="(val, key) in value"
-              v-if="val"
-            )
-              strong.mr-1 {{ getGlobalVars(key) }}:
-              a(:href="`callto:${val}`") {{ val }}
-
-          template(#item.school="{ value }")
-            span {{ value }}
-
-          template(#item.classStudy="{ value }")
-            span {{ value }}
-
-          template(#item.adress="{ value }")
-            .mt-2.mb-2(
-              v-for="(val, key) in value"
-              v-if="val"
-            )
-              strong.mr-1 {{ getGlobalVars(key) }}:
-              span {{ val }}
-
-          template(#item.group="{ value }")
-            div {{ value }}
-
-          template(#item.action="{ item }")
-            v-icon(
-              medium
-              class="mr-2"
-              @click="editItem(item)"
-            ) mdi-pencil
-            v-icon(
-              medium
-              @click="deleteItem(item)"
-            ) mdi-delete
+      StudentsTable(
+        :headers="computedHeaders"
+        :students="students"
+        @delete="deleteStudentHandler"
+        @edit="editUser"
+      )
 
   v-btn(
     class="btn"
@@ -108,26 +50,18 @@ v-container
 </template>
 
 <script>
-import DeleteModal from '@/components/DeleteUserModal'
-import EditModal from '@/components/EditUserModal'
+import DeleteModal from '@/components/DeleteStudentModal'
+import EditModal from '@/components/EditStudentModal'
+import StudentsTable from '@/components/StudentsTable'
 
-class Student {
-  constructor ({ name, dateOfBirthday, group, school, classStudy, adress, parents, phones }) {
-    this.name = name
-    this.dateOfBirthday = dateOfBirthday
-    this.group = group
-    this.school = school
-    this.classStudy = classStudy
-    this.adress = adress
-    this.parents = parents
-    this.phones = phones
-  }
-}
+const deleteModal = 'delete-modal'
+const editModal = 'edit-modal'
 
 export default {
   name: 'Students',
 
   components: {
+    StudentsTable,
     DeleteModal,
     EditModal
   },
@@ -135,10 +69,9 @@ export default {
   data () {
     return {
       dialog: false,
+      indexOfStudent: 0,
       isEditModal: false,
-      currentStudent: null,
       currentStudentName: '',
-      search: '',
       showAllColumns: false,
       headers: [
         {
@@ -204,31 +137,25 @@ export default {
     },
     formTitle () {
       return this.isEditModal ? 'Редактирование профиля' : 'Внимание!'
+    },
+    modal () {
+      return this.isEditModal ? editModal : deleteModal
     }
   },
 
-  // TODO:: global vars
   methods: {
-    getGlobalVars (key) {
-      const keys = {
-        student: 'Ученик',
-        parents: 'Родители',
-        mother: 'Мама',
-        father: 'Папа',
-        grandMother: 'Бабушка'
-      }
-
-      return keys[key]
+    deleteStudent () {
+      this.$store.commit('deleteStudent', this.indexOfStuden)
+      this.dialog = false
     },
-    editItem (item) {
-      this.currentStudent = new Student({ ...item })
-      this.isEditModal = true
-      this.dialog = true
-    },
-    deleteItem (item) {
-      this.currentStudent = new Student({ ...item })
-      this.currentStudentName = this.currentStudent.name
+    deleteStudentHandler (item) {
+      this.indexOfStudent = this.students.indexOf(item)
       this.isEditModal = false
+      this.dialog = true
+      this.currentStudentName = item.name
+    },
+    editUser () {
+      this.isEditModal = true
       this.dialog = true
     }
   }
@@ -239,8 +166,5 @@ export default {
 .btn {
   right: 32px !important;
   bottom: 32px !important;
-}
-span {
-  white-space: nowrap;
 }
 </style>

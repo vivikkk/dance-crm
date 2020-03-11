@@ -1,3 +1,16 @@
+// class Student {
+//   constructor ({ name, dateOfBirthday, group, school, classStudy, adress, parents, phones }) {
+//     this.name = name
+//     this.dateOfBirthday = dateOfBirthday
+//     this.group = group
+//     this.school = school
+//     this.classStudy = classStudy
+//     this.adress = adress
+//     this.parents = parents
+//     this.phones = phones
+//   }
+// }
+
 export default {
   // TODO: timestamp filter
   state: [
@@ -46,7 +59,11 @@ export default {
       }
     }
   ],
-  mutations: {},
+  mutations: {
+    deleteStudent (state, payload) {
+      state.splice(payload, 1)
+    }
+  },
   actions: {},
   getters: {
     students (state) {

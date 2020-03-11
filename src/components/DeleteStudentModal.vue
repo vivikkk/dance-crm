@@ -1,0 +1,28 @@
+<template lang="pug">
+div
+  v-card-text <strong> {{ student }}</strong> будет удалена из списка учеников.
+  v-card-actions
+    v-spacer
+    v-btn(
+      text
+      @click="$emit('cancel')"
+    ) Отмена
+    v-btn(
+      color="red"
+      text
+      @click="$emit('delete')"
+    ) Удалить
+</template>
+
+<script>
+export default {
+  name: 'DeleteModal',
+
+  props: {
+    student: {
+      type: String,
+      required: true
+    }
+  }
+}
+</script>

@@ -67,6 +67,6 @@ v-card-text
 
 <script>
 export default {
-  name: 'Edit Modal'
+  name: 'EditModal'
 }
 </script>
