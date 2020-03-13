@@ -32,25 +32,54 @@ div
                       v-model="currentStudent.name"
                     )
                   v-col(cols="12" md="4")
-                    v-text-field(
-                      label="Дата рождения"
-                      v-model="currentStudent.dateOfBirthday"
+                    v-menu(
+                      ref="menu"
+                      v-model="menu"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
                     )
+                      template(#activator="{ on }")
+                        v-text-field(
+                          v-model="currentStudent.dateOfBirthday"
+                          label="Дата рождения"
+                          prepend-icon="mdi-calendar"
+                          hint="YYYY/MM/DD/"
+                          persistent-hint
+                          readonly
+                          v-on="on"
+                        )
+                      v-date-picker(
+                        ref="picker"
+                        v-model="currentStudent.dateOfBirthday"
+                        :max="new Date().toISOString().substr(0, 10)"
+                        min="1990-01-01"
+                        @change="save"
+                      )
+
                   v-col(cols="12" md="4")
-                    v-text-field(
+                    v-select(
                       label="Группа"
                       v-model="currentStudent.group"
+                      :items="groups"
                     )
                   v-col(cols="12" md="4")
-                    v-text-field(
+                    v-select(
                       label="Школа"
                       v-model="currentStudent.school"
+                      :items="schools"
                     )
                   v-col(cols="12" md="4")
-                    v-text-field(
+                    v-select(
                       label="Класс"
                       v-model="currentStudent.classStudy"
+                      :items="classes"
                     )
+
               v-stepper-content(:step="2")
                 v-row
                   v-col(cols="12")
@@ -68,8 +97,14 @@ div
                       label="Бабушка"
                       v-model="currentStudent.parents.grandMother"
                     )
+
               v-stepper-content(:step="3")
                 v-row
+                  v-col(cols="12" md="4")
+                    v-text-field(
+                      label="Телефон ребенка"
+                      v-model="currentStudent.phones.student"
+                    )
                   v-col(cols="12" md="4")
                     v-text-field(
                       label="Телефон мамы"
@@ -79,11 +114,6 @@ div
                     v-text-field(
                       label="Телефон папы"
                       v-model="currentStudent.phones.father"
-                    )
-                  v-col(cols="12" md="4")
-                    v-text-field(
-                      label="Телефон ребенка"
-                      v-model="currentStudent.phones.student"
                     )
                   v-col(cols="12")
                     v-text-field(
@@ -109,6 +139,8 @@ div
 </template>
 
 <script>
+import { schools, groups, classes } from '../constants'
+
 export default {
   name: 'EditModal',
 
@@ -121,11 +153,15 @@ export default {
 
   data () {
     return {
+      classes: classes,
+      groups: groups,
+      schools: schools,
+      menu: false,
       isEditModal: true,
       currentStudent: {
         id: '',
         name: '',
-        dateOfBirthday: '',
+        dateOfBirthday: null,
         group: '',
         school: '',
         classStudy: '',
@@ -157,7 +193,16 @@ export default {
     }
   },
 
+  watch: {
+    menu (val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+    }
+  },
+
   methods: {
+    save (date) {
+      this.$refs.menu.save(date)
+    },
     update () {
       if (this.isEditModal) {
         this.$emit('update', this.currentStudent)

@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import constans from '../constants'
+import { globalVars } from '../constants'
 
 export default {
   name: 'StudentsTable',
@@ -91,7 +91,7 @@ export default {
 
   methods: {
     getGlobalVars (key) {
-      return constans[key]
+      return globalVars[key]
     },
     editItem (item) {
       this.$emit('edit', item)

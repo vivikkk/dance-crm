@@ -1,12 +1,11 @@
 export default {
-  // TODO: timestamp filter
   state: [
     {
       id: 1,
       name: 'Ольга Николаевна Мухтарова',
-      dateOfBirthday: 1268239325,
+      dateOfBirthday: '2008-03-15',
       group: 'Старшая',
-      school: 'МКОУ СОШ №5',
+      school: 'МКОУ СОШ №1',
       classStudy: 10,
       adress: {
         student: 'Парковая 1-24',
@@ -27,9 +26,9 @@ export default {
     {
       id: 2,
       name: 'Василиса Игоревна Твердолобова',
-      dateOfBirthday: 1236012125,
+      dateOfBirthday: '2002-01-01 ',
       group: 'Старшая',
-      school: 'МКОУ Гимназия №6',
+      school: 'МКОУ-гимназия №6',
       classStudy: 8,
       adress: {
         student: 'Первомайская, 23 а-3',
