@@ -4,7 +4,7 @@ export default {
       id: 1,
       name: 'Ольга Николаевна Мухтарова',
       dateOfBirthday: '2008-03-15',
-      group: 'Старшая',
+      group: 'Средняя',
       school: 'МКОУ СОШ №1',
       classStudy: 10,
       adress: {

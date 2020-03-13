@@ -37,17 +37,15 @@ div
                       v-model="menu"
                       :close-on-content-click="false"
                       :nudge-right="40"
-                      lazy
                       transition="scale-transition"
                       offset-y
-                      full-width
                       min-width="290px"
                     )
                       template(#activator="{ on }")
                         v-text-field(
                           v-model="currentStudent.dateOfBirthday"
                           label="Дата рождения"
-                          prepend-icon="mdi-calendar"
+                          prepend-icon="mdi-gift-outline"
                           hint="YYYY/MM/DD/"
                           persistent-hint
                           readonly
@@ -125,6 +123,7 @@ div
                       label="Адрес родителей"
                       v-model="currentStudent.adress.parents"
                     )
+
     v-card-actions
       v-spacer
       v-btn(

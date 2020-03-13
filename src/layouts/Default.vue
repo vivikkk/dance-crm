@@ -48,7 +48,7 @@ export default {
   data: () => ({
     drawer: false,
     links: [
-      { title: 'Добавить событие', icon: 'mdi-calendar-plus', url: '/new-event' },
+      { title: 'События', icon: 'mdi-calendar', url: '/events' },
       { title: 'Ученики', icon: 'mdi-face', url: '/students' }
     ]
   })
