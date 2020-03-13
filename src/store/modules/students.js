@@ -62,6 +62,9 @@ export default {
       Object.keys(student).forEach(key => {
         student[key] = payload[key]
       })
+    },
+    add (state, payload) {
+      state.push(payload)
     }
   },
   actions: {},

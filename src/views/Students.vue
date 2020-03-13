@@ -13,6 +13,7 @@ v-container
         @cancel="dialog = false"
         @delete="deleteStudent"
         @update="updateStudent"
+        @add="addStudent"
       )
 
   v-row
@@ -34,7 +35,7 @@ v-container
         :headers="computedHeaders"
         :students="students"
         @delete="deleteStudentHandler"
-        @edit="editUserHandler"
+        @edit="editStudentHandler"
       )
 
   v-btn(
@@ -145,18 +146,18 @@ export default {
 
   // TODO: one handler
   methods: {
-    newUserHandler (user) {
-      this.studentId = user.id
+    newUserHandler (student) {
+      this.studentId = student.id
       this.isEditModal = true
       this.dialog = true
     },
-    deleteStudentHandler (user) {
-      this.studentId = user.id
+    deleteStudentHandler (student) {
+      this.studentId = student.id
       this.isEditModal = false
       this.dialog = true
     },
-    editUserHandler (user) {
-      this.studentId = user.id
+    editStudentHandler (student) {
+      this.studentId = student.id
       this.isEditModal = true
       this.dialog = true
     },
@@ -164,9 +165,18 @@ export default {
       this.dialog = false
       this.$store.commit('delete', this.currentStudent)
     },
-    updateStudent (user) {
+    updateStudent (student) {
       this.dialog = false
-      this.$store.commit('update', user)
+      this.$store.commit('update', student)
+    },
+    addStudent (student) {
+      const studentsLength = this.students.length
+      const currentStudentId = studentsLength + 1
+      const currentStudent = student
+
+      currentStudent.id = currentStudentId
+      this.dialog = false
+      this.$store.commit('add', currentStudent)
     }
   }
 }

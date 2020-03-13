@@ -2,7 +2,7 @@
 div
   v-card-title(
     class="headline"
-  ) {{ formTitle }}
+  ) {{ isEditModal ? 'Редактирование профиля' : 'Новый пользователь' }}
   v-card-text
     v-container
       v-row
@@ -105,7 +105,7 @@ div
         color="green"
         text
         @click="update"
-    ) Сохранить
+      ) Сохранить
 </template>
 
 <script>
@@ -121,7 +121,7 @@ export default {
 
   data () {
     return {
-      formTitle: '',
+      isEditModal: true,
       currentStudent: {
         id: '',
         name: '',
@@ -150,16 +150,20 @@ export default {
 
   mounted () {
     if (this.student.name) {
+      this.isEditModal = true
       this.currentStudent = Object.assign({}, this.student)
-      this.formTitle = 'Редактирование профиля'
     } else {
-      this.formTitle = 'Новый пользователь'
+      this.isEditModal = false
     }
   },
 
   methods: {
     update () {
-      this.$emit('update', this.currentStudent)
+      if (this.isEditModal) {
+        this.$emit('update', this.currentStudent)
+      } else {
+        this.$emit('add', this.currentStudent)
+      }
     }
   }
 }
