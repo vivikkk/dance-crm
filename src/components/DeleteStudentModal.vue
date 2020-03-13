@@ -1,5 +1,6 @@
 <template lang="pug">
 div
+  v-card-title(class="headline") Внимание!
   v-card-text <strong> {{ student.name }}</strong> будет удалена из списка учеников.
   v-card-actions
     v-spacer

@@ -6,9 +6,6 @@ v-container
   )
     // TODO: declination
     v-card
-      v-card-title(
-        class="headline"
-      ) {{ formTitle }}
       component(
         v-if="dialog"
         :is="modalLayout"
@@ -48,6 +45,7 @@ v-container
     bottom
     absolute
     right
+    @click="newUserHandler"
   )
     v-icon(color="white") mdi-account-plus
 </template>
@@ -137,9 +135,6 @@ export default {
     computedHeaders () {
       return this.showAllColumns ? this.headers : this.headers.filter(header => !header.hideByDefault)
     },
-    formTitle () {
-      return this.isEditModal ? 'Редактирование профиля' : 'Внимание!'
-    },
     modalLayout () {
       return this.isEditModal ? editModal : deleteModal
     },
@@ -150,6 +145,11 @@ export default {
 
   // TODO: one handler
   methods: {
+    newUserHandler (user) {
+      this.studentId = user.id
+      this.isEditModal = true
+      this.dialog = true
+    },
     deleteStudentHandler (user) {
       this.studentId = user.id
       this.isEditModal = false

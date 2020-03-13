@@ -1,17 +1,3 @@
-// class Student {
-//   constructor ({ id, name, dateOfBirthday, group, school, classStudy, adress, parents, phones }) {
-//     this.id = id
-//     this.name = name
-//     this.dateOfBirthday = dateOfBirthday
-//     this.group = group
-//     this.school = school
-//     this.classStudy = classStudy
-//     this.adress = adress
-//     this.parents = parents
-//     this.phones = phones
-//   }
-// }
-
 export default {
   // TODO: timestamp filter
   state: [
@@ -85,9 +71,13 @@ export default {
     },
     studentById (state) {
       return id => {
-        return state.find(obj => {
-          return obj.id === id
-        })
+        if (id) {
+          return state.find(obj => {
+            return obj.id === id
+          })
+        } else {
+          return {}
+        }
       }
     }
   }
