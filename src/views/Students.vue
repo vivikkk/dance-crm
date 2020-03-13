@@ -10,10 +10,12 @@ v-container
         class="headline"
       ) {{ formTitle }}
       component(
-        :is="modal"
-        :student="currentStudentName"
+        v-if="dialog"
+        :is="modalLayout"
+        :student="currentStudent"
         @cancel="dialog = false"
         @delete="deleteStudent"
+        @update="updateStudent"
       )
 
   v-row
@@ -23,6 +25,7 @@ v-container
         v-model="showAllColumns"
         label="Показать все колонки"
       )
+
   v-row(
     align="center"
     justify="center"
@@ -34,7 +37,7 @@ v-container
         :headers="computedHeaders"
         :students="students"
         @delete="deleteStudentHandler"
-        @edit="editUser"
+        @edit="editUserHandler"
       )
 
   v-btn(
@@ -69,9 +72,8 @@ export default {
   data () {
     return {
       dialog: false,
-      indexOfStudent: 0,
+      studentId: null,
       isEditModal: false,
-      currentStudentName: '',
       showAllColumns: false,
       headers: [
         {
@@ -138,25 +140,33 @@ export default {
     formTitle () {
       return this.isEditModal ? 'Редактирование профиля' : 'Внимание!'
     },
-    modal () {
+    modalLayout () {
       return this.isEditModal ? editModal : deleteModal
+    },
+    currentStudent () {
+      return this.$store.getters.studentById(this.studentId)
     }
   },
 
+  // TODO: one handler
   methods: {
-    deleteStudent () {
-      this.$store.commit('deleteStudent', this.indexOfStuden)
-      this.dialog = false
-    },
-    deleteStudentHandler (item) {
-      this.indexOfStudent = this.students.indexOf(item)
+    deleteStudentHandler (user) {
+      this.studentId = user.id
       this.isEditModal = false
       this.dialog = true
-      this.currentStudentName = item.name
     },
-    editUser () {
+    editUserHandler (user) {
+      this.studentId = user.id
       this.isEditModal = true
       this.dialog = true
+    },
+    deleteStudent () {
+      this.dialog = false
+      this.$store.commit('delete', this.currentStudent)
+    },
+    updateStudent (user) {
+      this.dialog = false
+      this.$store.commit('update', user)
     }
   }
 }

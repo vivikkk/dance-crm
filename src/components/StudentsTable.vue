@@ -8,11 +8,11 @@
         single-line
         hide-details
       )
+
     v-data-table(
       :headers="headers"
       :fixed-header="true"
       :items="students"
-      :search="search"
       align="start"
     )
       template(#item.name="{ value }")
@@ -94,7 +94,7 @@ export default {
       return constans[key]
     },
     editItem (item) {
-      this.$emit('edit')
+      this.$emit('edit', item)
     },
     deleteItem (item) {
       this.$emit('delete', item)

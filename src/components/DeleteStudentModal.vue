@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  v-card-text <strong> {{ student }}</strong> будет удалена из списка учеников.
+  v-card-text <strong> {{ student.name }}</strong> будет удалена из списка учеников.
   v-card-actions
     v-spacer
     v-btn(
@@ -20,7 +20,7 @@ export default {
 
   props: {
     student: {
-      type: String,
+      type: Object,
       required: true
     }
   }

@@ -1,5 +1,6 @@
 // class Student {
-//   constructor ({ name, dateOfBirthday, group, school, classStudy, adress, parents, phones }) {
+//   constructor ({ id, name, dateOfBirthday, group, school, classStudy, adress, parents, phones }) {
+//     this.id = id
 //     this.name = name
 //     this.dateOfBirthday = dateOfBirthday
 //     this.group = group
@@ -15,6 +16,7 @@ export default {
   // TODO: timestamp filter
   state: [
     {
+      id: 1,
       name: 'Ольга Николаевна Мухтарова',
       dateOfBirthday: 1268239325,
       group: 'Старшая',
@@ -37,6 +39,7 @@ export default {
       }
     },
     {
+      id: 2,
       name: 'Василиса Игоревна Твердолобова',
       dateOfBirthday: 1236012125,
       group: 'Старшая',
@@ -60,14 +63,32 @@ export default {
     }
   ],
   mutations: {
-    deleteStudent (state, payload) {
-      state.splice(payload, 1)
+    delete (state, payload) {
+      const index = state.indexOf(payload)
+
+      state.splice(index, 1)
+    },
+    update (state, payload) {
+      const student = state.find(a => {
+        return a.id === payload.id
+      })
+
+      Object.keys(student).forEach(key => {
+        student[key] = payload[key]
+      })
     }
   },
   actions: {},
   getters: {
     students (state) {
       return state
+    },
+    studentById (state) {
+      return id => {
+        return state.find(obj => {
+          return obj.id === id
+        })
+      }
     }
   }
 }
