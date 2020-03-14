@@ -128,6 +128,7 @@ div
       v-spacer
       v-btn(
         text
+        color="secondary"
         @click="$emit('cancel')"
       ) Отмена
       v-btn(

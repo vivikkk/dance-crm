@@ -1,13 +1,32 @@
 <template lang="pug">
 v-container
+  v-dialog(
+    v-model="dialog"
+    max-width="400px"
+  )
+    v-card
+      v-card-title(class="headline") Внимание!
+      v-card-text Удалить мероприятие?
+      v-card-actions
+        v-spacer
+        v-btn(
+          text
+          @click="dialog = false"
+        ) Отмена
+        v-btn(
+          color="red"
+          text
+          @click=""
+        ) Удалить
+
   v-row(
     class="fill-height"
   )
     v-col
-      h1 Мероприятия
+      h1 Календарь событий
       v-sheet(height="64")
         v-toolbar(flat color="white")
-          v-btn.mr-4(outlined color="grey darken-2" @click="setToday") Сегодня
+          v-btn(outlined color="grey darken-2 mr-4" @click="setToday") Сегодня
           v-btn(fab text small color="grey darken-2" @click="prev")
             v-icon(small) mdi-chevron-left
           v-btn(fab text small color="grey darken-2" @click="next")
@@ -46,16 +65,38 @@ v-container
           :activator="selectedElement"
           offset-x
         )
-          v-card(color="grey lighten-4" min-width="350px" flat)
-            v-toolbar(:color="selectedEvent.color" dark)
-              v-btn(icon)
-                v-icon mdi-pencil
-              v-toolbar-title(v-html="selectedEvent.name")
+          v-card(color="grey lighten-4" max-width="550px" min-width="350px" flat)
+            v-toolbar(
+              dark
+              :color="getEventColor(selectedEvent)"
+            )
+              v-toolbar-title {{ selectedEvent.name }}
               v-spacer
+              v-btn(
+                icon
+                @click="dialog = true"
+              )
+                v-icon mdi-trash-can-outline
             v-card-text
-              span(v-html="selectedEvent.details")
+              v-select(
+                label="Тип занятия"
+                v-model="selectedEvent.name"
+                :items="typesEvents"
+              )
+              v-select(
+                label="Группа"
+                v-model="selectedEvent.group"
+                multiple
+                :items="groups"
+              )
+              v-text-field(
+                label="Дополнительно"
+                v-model="selectedEvent.description"
+              )
             v-card-actions
+              v-spacer
               v-btn(text color="secondary" @click="selectedOpen = false") Отмена
+              v-btn(text color="green" @click="") Сохранить
 
   v-btn(
     class="btn"
@@ -71,8 +112,14 @@ v-container
 </template>
 
 <script>
+import { colors, groups, typesEvents } from '../constants'
+
+// TODO: event time
 export default {
   data: () => ({
+    dialog: false,
+    groups: groups,
+    typesEvents: typesEvents,
     focus: '',
     type: 'month',
     typeToLabel: {
@@ -85,32 +132,12 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [
-      {
-        name: 'Занятие (ст)',
-        start: '2020-03-03',
-        color: 'blue'
-      },
-      {
-        name: 'Занятие (мл)',
-        start: '2020-03-03',
-        color: 'green'
-      },
-      {
-        name: 'Мероприятие',
-        start: '2020-03-25',
-        color: 'cyan'
-      },
-      {
-        name: 'Выезд',
-        start: '2020-03-20',
-        end: '2020-03-21',
-        color: 'orange'
-      }
-    ],
     today: '2020-03-14'
   }),
   computed: {
+    events () {
+      return this.$store.getters.events
+    },
     title () {
       const { start, end } = this
       if (!start || !end) {
@@ -151,7 +178,9 @@ export default {
       this.type = 'day'
     },
     getEventColor (event) {
-      return event.color
+      const eventIndex = this.typesEvents.indexOf(event.name)
+
+      return colors[eventIndex]
     },
     setToday () {
       this.focus = this.today

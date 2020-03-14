@@ -21,18 +21,42 @@ const groups = [
   'Младшая',
   'Средняя',
   'Старшая',
-  'VIVA KIDS'
+  'VIVA KIDS (Ст)',
+  'VIVA KIDS (Мл)'
 ]
 
 const classes = []
-
 for (let i = 1; i <= 11; i++) {
   classes.push(i)
 }
+
+const typesEvents = [
+  'Выступление',
+  'Конкурс',
+  'Собрание',
+  'Открытый урок',
+  'Праздник',
+  'Мастер-класс',
+  'Прогон',
+  'Занятие'
+]
+
+const colors = [
+  'indigo',
+  'deep-purple',
+  'cyan',
+  'green',
+  'orange',
+  'red',
+  'grey darken-1',
+  'blue'
+]
 
 export {
   globalVars,
   schools,
   groups,
-  classes
+  classes,
+  colors,
+  typesEvents
 }
