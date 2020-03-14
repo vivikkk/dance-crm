@@ -1,8 +1,7 @@
 <template lang="pug">
 v-app
   v-navigation-drawer(
-    app
-    temporary
+    app temporary
     v-model="drawer"
   )
     v-list
@@ -45,13 +44,15 @@ v-app
 export default {
   name: 'DefaultLayout',
 
-  data: () => ({
-    drawer: false,
-    links: [
-      { title: 'Задачи', icon: 'mdi-format-list-bulleted', url: '/tasks' },
-      { title: 'События', icon: 'mdi-calendar', url: '/events' },
-      { title: 'Ученики', icon: 'mdi-face', url: '/students' }
-    ]
-  })
+  data () {
+    return {
+      drawer: false,
+      links: [
+        { title: 'Задачи', icon: 'mdi-format-list-bulleted', url: '/tasks' },
+        { title: 'События', icon: 'mdi-calendar', url: '/events' },
+        { title: 'Ученики', icon: 'mdi-face', url: '/students' }
+      ]
+    }
+  }
 }
 </script>

@@ -127,13 +127,11 @@ div
     v-card-actions
       v-spacer
       v-btn(
-        text
-        color="secondary"
+        text color="secondary"
         @click="$emit('cancel')"
       ) Отмена
       v-btn(
-        color="green"
-        text
+        text color="green"
         @click="update"
       ) Сохранить
 </template>

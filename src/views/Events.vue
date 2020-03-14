@@ -34,8 +34,11 @@ v-container
           v-toolbar-title {{ title }}
           v-spacer
           v-menu(bottom right)
-            template(v-slot:activator="{ on }")
-              v-btn(outlined color="grey darken-2" v-on="on")
+            template(#activator="{ on }")
+              v-btn(
+                outlined color="grey darken-2"
+                v-on="on"
+              )
                 span {{ typeToLabel[type] }}
                 v-icon(right) mdi-menu-down
             v-list
@@ -134,6 +137,7 @@ export default {
     selectedOpen: false,
     today: '2020-03-14'
   }),
+
   computed: {
     events () {
       return this.$store.getters.events
@@ -169,9 +173,11 @@ export default {
       })
     }
   },
+
   mounted () {
     this.$refs.calendar.checkChange()
   },
+
   methods: {
     viewDay ({ date }) {
       this.focus = date

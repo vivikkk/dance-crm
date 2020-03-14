@@ -56,8 +56,7 @@
 
       template(#item.action="{ item }")
         v-icon(
-          medium
-          class="mr-2"
+          medium class="mr-2"
           @click="editItem(item)"
         ) mdi-pencil
         v-icon(

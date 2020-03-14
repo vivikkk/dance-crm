@@ -9,8 +9,7 @@ div
       @click="$emit('cancel')"
     ) Отмена
     v-btn(
-      color="red"
-      text
+      text color="red"
       @click="$emit('delete')"
     ) Удалить
 </template>

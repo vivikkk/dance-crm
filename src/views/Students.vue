@@ -39,13 +39,7 @@ v-container
       )
 
   v-btn(
-    class="btn"
-    color="green"
-    fab
-    large
-    bottom
-    absolute
-    right
+    class="btn" color="green" fab large bottom absolute right
     @click="newUserHandler"
   )
     v-icon(color="white") mdi-account-plus
