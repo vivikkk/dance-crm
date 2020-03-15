@@ -49,7 +49,7 @@ v-row(
         ref="calendar"
         v-model="focus"
         color="primary"
-        :events="events"
+        :events="myEvents"
         :event-color="getEventColor"
         :now="today"
         :type="type"
@@ -80,33 +80,230 @@ v-row(
             )
               v-icon mdi-trash-can-outline
           v-card-text
-              v-select(
-                label="Тип занятия"
-                v-model="selectedEvent.name"
-                :items="typesEvents"
+            v-select(
+              label="Тип занятия"
+              v-model="selectedEvent.name"
+              :items="typesEvents"
+            )
+            v-select(
+              label="Группа"
+              v-model="selectedEvent.group"
+              multiple
+              :items="groups"
+            )
+            v-text-field(
+              label="Дополнительно"
+              v-model="selectedEvent.description"
+            )
+
+            v-menu(
+              ref="startTimeMenu"
+              v-model="startTimeMenu"
+              :close-on-content-click="false"
+              :return-value.sync="selectedEvent.start"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            )
+              template(
+                v-slot:activator="{ on }"
               )
-              v-select(
-                label="Группа"
-                v-model="selectedEvent.group"
-                multiple
-                :items="groups"
+                v-text-field(
+                  v-model="selectedEvent.start"
+                  label="Начало события"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-on="on"
+                  hint="YYYY/MM/DD/"
+                  persistent-hint
+                  clearable
+                  @click:clear="selectedEvent.start = null"
+                )
+              v-date-picker(
+                no-title scrollable
+                v-model="selectedEvent.start"
               )
-              v-text-field(
-                label="Дополнительно"
-                v-model="selectedEvent.description"
+                v-spacer
+                v-btn(
+                  text color="primary"
+                  @click="startTimeMenu = false"
+                ) Отмена
+                v-btn(
+                  text color="primary"
+                  @click="$refs.startTimeMenu.save(selectedEvent.start)"
+                ) Ок
+
+            v-menu(
+              ref="endTimeMenu"
+              v-model="endTimeMenu"
+              :close-on-content-click="false"
+              :return-value.sync="selectedEvent.end"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            )
+              template(
+                v-slot:activator="{ on }"
               )
+                v-text-field(
+                  v-model="selectedEvent.end"
+                  label="Конец события"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-on="on"
+                  hint="YYYY/MM/DD/"
+                  persistent-hint
+                  clearable
+                  @click:clear="selectedEvent.end = null"
+                )
+              v-date-picker(
+                no-title scrollable
+                v-model="selectedEvent.end"
+              )
+                v-spacer
+                v-btn(
+                  text color="primary"
+                  @click="endTimeMenu = false"
+                ) Отмена
+                v-btn(
+                  text color="primary"
+                  @click="$refs.endTimeMenu.save(selectedEvent.end)"
+                ) Ок
+
             v-card-actions
               v-spacer
-              v-btn(text color="secondary" @click="selectedOpen = false") Отмена
-              v-btn(text color="green" @click="") Сохранить
+              v-btn(
+                text color="secondary"
+                @click="selectedOpen = false"
+              ) Отмена
+              v-btn(
+                text color="green"
+                @click=""
+              ) Сохранить
 </template>
 
 <script>
 export default {
   name: 'EventsCalendar',
 
+  props: {
+    events: {
+      type: Array,
+      required: true
+    },
+    groups: {
+      type: Array,
+      required: true
+    },
+    typesEvents: {
+      type: Array,
+      required: true
+    },
+    colors: {
+      type: Array,
+      required: true
+    }
+  },
+
   data () {
-    return {}
+    return {
+      focus: '',
+      type: 'month',
+      myEvents: [],
+      typeToLabel: {
+        month: 'Месяц',
+        week: 'Неделя',
+        day: 'День'
+      },
+      selectedEvent: {},
+      start: null,
+      end: null,
+      selectedElement: null,
+      selectedOpen: false,
+      startTimeMenu: false,
+      endTimeMenu: false,
+      today: new Date().toISOString().substr(0, 10)
+    }
+  },
+
+  mounted () {
+    this.$refs.calendar.checkChange()
+    this.myEvents = Object.assign([], this.events)
+  },
+
+  computed: {
+    title () {
+      const { start, end } = this
+      if (!start || !end) {
+        return ''
+      }
+
+      const startMonth = this.monthFormatter(start)
+      const endMonth = this.monthFormatter(end)
+      const suffixMonth = startMonth === endMonth ? '' : endMonth
+
+      const startYear = start.year
+      const endYear = end.year
+      const suffixYear = startYear === endYear ? '' : endYear
+
+      const startDay = start.day
+      const endDay = end.day
+
+      switch (this.type) {
+        case 'month':
+          return `${startMonth} ${startYear}`
+        case 'week':
+          return `${startDay} ${startMonth} ${startYear} - ${suffixMonth} ${endDay} ${suffixYear}`
+      }
+      return ''
+    },
+    monthFormatter () {
+      return this.$refs.calendar.getFormatter({
+        timeZone: 'UTC', month: 'long'
+      })
+    }
+  },
+
+  methods: {
+    viewDay ({ date }) {
+      this.focus = date
+      this.type = 'day'
+    },
+    getEventColor (event) {
+      const eventIndex = this.typesEvents.indexOf(event.name)
+
+      return this.colors[eventIndex]
+    },
+    setToday () {
+      this.focus = this.today
+    },
+    prev () {
+      this.$refs.calendar.prev()
+    },
+    next () {
+      this.$refs.calendar.next()
+    },
+    showEvent ({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent = Object.assign({}, event)
+        this.selectedElement = nativeEvent.target
+        // eslint-disable-next-line no-return-assign
+        setTimeout(() => this.selectedOpen = true, 10)
+      }
+
+      if (this.selectedOpen) {
+        this.selectedOpen = false
+        setTimeout(open, 10)
+      } else {
+        open()
+      }
+
+      nativeEvent.stopPropagation()
+    },
+    updateRange ({ start, end }) {
+      this.start = start
+      this.end = end
+    }
   }
 }
 </script>

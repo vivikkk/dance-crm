@@ -4,6 +4,7 @@ export default {
       id: 1,
       name: 'Занятие',
       start: '2020-03-01',
+      end: null,
       description: '',
       group: ['Младшая']
     },
@@ -11,6 +12,7 @@ export default {
       id: 2,
       name: 'Праздник',
       start: '2020-03-12',
+      end: null,
       description: '',
       group: ['Средняя']
     },
@@ -26,6 +28,7 @@ export default {
       id: 4,
       name: 'Занятие',
       start: '2020-03-01',
+      end: null,
       description: '',
       group: ['VIVA KIDS (Ст)']
     }
