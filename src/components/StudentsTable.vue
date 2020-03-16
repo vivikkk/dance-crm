@@ -11,7 +11,6 @@
 
     v-data-table(
       :headers="headers"
-      :fixed-header="true"
       :items="students"
       align="start"
     )

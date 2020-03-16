@@ -5,6 +5,7 @@ import Home from '../views/Home'
 import Login from '../views/Login'
 import Students from '../views/Students'
 import Events from '../views/Events'
+import Attendance from '../views/Attendance'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
     path: '/events',
     name: 'Events',
     component: Events
+  },
+  {
+    path: '/attendance',
+    name: 'Attendance',
+    component: Attendance
   }
 ]
 

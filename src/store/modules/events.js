@@ -6,7 +6,13 @@ export default {
       start: '2020-03-01',
       end: null,
       description: null,
-      group: ['Младшая']
+      group: ['Средняя'],
+      absenteeList: [
+        {
+          id: 1,
+          description: 'Тоска'
+        }
+      ]
     },
     {
       id: 2,
@@ -30,7 +36,17 @@ export default {
       start: '2020-03-01',
       end: null,
       description: null,
-      group: ['VIVA KIDS (Ст)']
+      group: ['Средняя'],
+      absenteeList: [
+        {
+          id: 1,
+          description: 'Еще раз тоска'
+        },
+        {
+          id: 3,
+          description: 'Тошнит'
+        }
+      ]
     }
   ],
   mutations: {

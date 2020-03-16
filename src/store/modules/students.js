@@ -45,6 +45,29 @@ export default {
         father: '',
         grandMother: ''
       }
+    },
+    {
+      id: 3,
+      name: 'Виктория',
+      dateOfBirthday: '2002-01-01 ',
+      group: 'Средняя',
+      school: 'МКОУ-гимназия №6',
+      classStudy: 5,
+      adress: {
+        student: '',
+        parents: ''
+      },
+      parents: {
+        mother: '',
+        father: '',
+        grandMother: ''
+      },
+      phones: {
+        student: '',
+        mother: '',
+        father: '',
+        grandMother: ''
+      }
     }
   ],
   mutations: {

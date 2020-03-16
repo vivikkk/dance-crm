@@ -49,6 +49,7 @@ export default {
       drawer: false,
       links: [
         { title: 'Задачи', icon: 'mdi-format-list-bulleted', url: '/tasks' },
+        { title: 'Посещаемость', icon: 'mdi-av-timer', url: '/attendance' },
         { title: 'События', icon: 'mdi-calendar', url: '/events' },
         { title: 'Ученики', icon: 'mdi-face', url: '/students' }
       ]
