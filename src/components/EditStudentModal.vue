@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+v-card
   v-card-title(
     class="headline"
   ) {{ isEditModal ? 'Редактирование профиля' : 'Новый пользователь' }}

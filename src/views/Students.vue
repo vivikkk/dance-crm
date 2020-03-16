@@ -5,16 +5,15 @@ v-container
     :max-width="`${this.isEditModal ? '800px' : '400px'}`"
   )
     // TODO: declination
-    v-card
-      component(
-        v-if="dialog"
-        :is="modalLayout"
-        :student="currentStudent"
-        @cancel="dialog = false"
-        @delete="deleteStudent"
-        @update="updateStudent"
-        @add="addStudent"
-      )
+    component(
+      v-if="dialog"
+      :is="modalLayout"
+      :student="currentStudent"
+      @cancel="dialog = false"
+      @delete="deleteStudent"
+      @update="updateStudent"
+      @add="addStudent"
+    )
 
   v-row
     v-col
@@ -157,11 +156,11 @@ export default {
     },
     deleteStudent () {
       this.dialog = false
-      this.$store.commit('delete', this.currentStudent)
+      this.$store.commit('deleteStudent', this.studentId)
     },
     updateStudent (student) {
       this.dialog = false
-      this.$store.commit('update', student)
+      this.$store.commit('updateStudent', student)
     },
     addStudent (student) {
       const studentsLength = this.students.length
@@ -170,7 +169,7 @@ export default {
 
       currentStudent.id = currentStudentId
       this.dialog = false
-      this.$store.commit('add', currentStudent)
+      this.$store.commit('addStudent', currentStudent)
     }
   }
 }

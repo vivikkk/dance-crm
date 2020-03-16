@@ -1,7 +1,8 @@
 <template lang="pug">
 v-container
+  //TODO: modal in component
   v-dialog(
-    v-model="dialog"
+    v-model="deleteEventDialog"
     max-width="400px"
   )
     v-card
@@ -18,6 +19,19 @@ v-container
           @click="deleteEvent"
         ) Удалить
 
+  v-dialog(
+    v-if="addEventDialog"
+    v-model="addEventDialog"
+    max-width="500px"
+  )
+    AddEventModal(
+      :groups="groups"
+      :typesEvents="typesEvents"
+      :colors="colors"
+      @add="addEvent"
+      @cancel="addEventDialog = false"
+    )
+
   EventsCalendar(
     :events="events"
     :groups="groups"
@@ -30,24 +44,27 @@ v-container
   v-btn(
     class="btn" color="green" fab large
     bottom absolute right
-    @click=""
+    @click="addEventDialog = true"
   )
     v-icon(color="white") mdi-calendar-plus
 </template>
 
 <script>
 import EventsCalendar from '@/components/EventsCalendar'
+import AddEventModal from '@/components/AddEventModal'
 import { colors, groups, typesEvents } from '../constants'
 
 // TODO: event time
 export default {
   components: {
-    EventsCalendar
+    EventsCalendar,
+    AddEventModal
   },
 
   data () {
     return {
-      dialog: false,
+      deleteEventDialog: false,
+      addEventDialog: false,
       groups: groups,
       colors: colors,
       typesEvents: typesEvents,
@@ -63,15 +80,19 @@ export default {
 
   methods: {
     deleteModalHandler (id) {
-      this.dialog = true
+      this.deleteEventDialog = true
       this.deletedEventId = id
     },
     deleteEvent () {
-      this.dialog = false
+      this.deleteEventDialog = false
       this.$store.commit('deleteEvent', this.deletedEventId)
     },
     updateEvent (event) {
       this.$store.commit('updateEvent', event)
+    },
+    addEvent (event) {
+      this.addEventDialog = false
+      this.$store.commit('addEvent', event)
     }
   }
 }

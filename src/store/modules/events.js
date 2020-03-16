@@ -5,7 +5,7 @@ export default {
       name: 'Занятие',
       start: '2020-03-01',
       end: null,
-      description: '',
+      description: null,
       group: ['Младшая']
     },
     {
@@ -13,7 +13,7 @@ export default {
       name: 'Праздник',
       start: '2020-03-12',
       end: null,
-      description: '',
+      description: null,
       group: ['Средняя']
     },
     {
@@ -29,7 +29,7 @@ export default {
       name: 'Занятие',
       start: '2020-03-01',
       end: null,
-      description: '',
+      description: null,
       group: ['VIVA KIDS (Ст)']
     }
   ],
@@ -46,7 +46,9 @@ export default {
         event[key] = payload[key]
       })
     },
-    addEvent (state, payload) {}
+    addEvent (state, payload) {
+      state.push(payload)
+    }
   },
   actions: {},
   getters: {
