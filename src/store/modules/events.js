@@ -34,9 +34,19 @@ export default {
     }
   ],
   mutations: {
-    delete (state, payload) {},
-    update (state, payload) {},
-    add (state, payload) {}
+    deleteEvent (state, payload) {
+      const index = state.map(item => item.id).indexOf(payload)
+
+      state.splice(index, 1)
+    },
+    updateEvent (state, payload) {
+      const event = state.find(item => item.id === payload.id)
+
+      Object.keys(event).forEach(key => {
+        event[key] = payload[key]
+      })
+    },
+    addEvent (state, payload) {}
   },
   actions: {},
   getters: {

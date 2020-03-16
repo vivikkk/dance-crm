@@ -48,15 +48,14 @@ export default {
     }
   ],
   mutations: {
+    // TODO: rename mutations
     delete (state, payload) {
       const index = state.indexOf(payload)
 
       state.splice(index, 1)
     },
     update (state, payload) {
-      const student = state.find(a => {
-        return a.id === payload.id
-      })
+      const student = state.find(item => item.id === payload.id)
 
       Object.keys(student).forEach(key => {
         student[key] = payload[key]

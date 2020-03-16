@@ -49,7 +49,7 @@ v-row(
         ref="calendar"
         v-model="focus"
         color="primary"
-        :events="myEvents"
+        :events="events"
         :event-color="getEventColor"
         :now="today"
         :type="type"
@@ -76,7 +76,7 @@ v-row(
             v-spacer
             v-btn(
               icon
-              @click="dialog = true"
+              @click="$emit('delete', selectedEvent.id)"
             )
               v-icon mdi-trash-can-outline
           v-card-text
@@ -178,7 +178,7 @@ v-row(
               ) Отмена
               v-btn(
                 text color="green"
-                @click=""
+                @click="update"
               ) Сохранить
 </template>
 
@@ -209,7 +209,6 @@ export default {
     return {
       focus: '',
       type: 'month',
-      myEvents: [],
       typeToLabel: {
         month: 'Месяц',
         week: 'Неделя',
@@ -228,7 +227,6 @@ export default {
 
   mounted () {
     this.$refs.calendar.checkChange()
-    this.myEvents = Object.assign([], this.events)
   },
 
   computed: {
@@ -303,6 +301,10 @@ export default {
     updateRange ({ start, end }) {
       this.start = start
       this.end = end
+    },
+    update () {
+      this.$emit('update', this.selectedEvent)
+      this.selectedOpen = false
     }
   }
 }

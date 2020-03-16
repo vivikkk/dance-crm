@@ -14,9 +14,8 @@ v-container
           @click="dialog = false"
         ) Отмена
         v-btn(
-          color="red"
-          text
-          @click=""
+          color="red" text
+          @click="deleteEvent"
         ) Удалить
 
   EventsCalendar(
@@ -24,17 +23,14 @@ v-container
     :groups="groups"
     :typesEvents="typesEvents"
     :colors="colors"
+    @update="updateEvent"
+    @delete="deleteModalHandler"
   )
 
   v-btn(
-    class="btn"
-    color="green"
-    fab
-    large
-    bottom
-    absolute
-    right
-    @click
+    class="btn" color="green" fab large
+    bottom absolute right
+    @click=""
   )
     v-icon(color="white") mdi-calendar-plus
 </template>
@@ -54,13 +50,28 @@ export default {
       dialog: false,
       groups: groups,
       colors: colors,
-      typesEvents: typesEvents
+      typesEvents: typesEvents,
+      deletedEventId: null
     }
   },
 
   computed: {
     events () {
       return this.$store.getters.events
+    }
+  },
+
+  methods: {
+    deleteModalHandler (id) {
+      this.dialog = true
+      this.deletedEventId = id
+    },
+    deleteEvent () {
+      this.dialog = false
+      this.$store.commit('deleteEvent', this.deletedEventId)
+    },
+    updateEvent (event) {
+      this.$store.commit('updateEvent', event)
     }
   }
 }
