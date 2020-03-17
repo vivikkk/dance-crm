@@ -2,7 +2,7 @@
 v-container
   //TODO: modal in component
   v-dialog(
-    v-model="deleteEventDialog"
+    v-model="showDeleteEventDialog"
     max-width="400px"
   )
     v-card
@@ -12,7 +12,7 @@ v-container
         v-spacer
         v-btn(
           text
-          @click="dialog = false"
+          @click="showDeleteEventDialog = false"
         ) Отмена
         v-btn(
           color="red" text
@@ -20,8 +20,8 @@ v-container
         ) Удалить
 
   v-dialog(
-    v-if="addEventDialog"
-    v-model="addEventDialog"
+    v-if="showAddEventDialog"
+    v-model="showAddEventDialog"
     max-width="500px"
     persistent
   )
@@ -30,7 +30,7 @@ v-container
       :typesEvents="typesEvents"
       :colors="colors"
       @add="addEvent"
-      @cancel="addEventDialog = false"
+      @cancel="showAddEventDialog = false"
     )
 
   EventsCalendar(
@@ -45,7 +45,7 @@ v-container
   v-btn(
     class="btn" color="green" fab large
     bottom absolute right
-    @click="addEventDialog = true"
+    @click="showAddEventDialog = true"
   )
     v-icon(color="white") mdi-calendar-plus
 </template>
@@ -64,8 +64,8 @@ export default {
 
   data () {
     return {
-      deleteEventDialog: false,
-      addEventDialog: false,
+      showDeleteEventDialog: false,
+      showAddEventDialog: false,
       groups: groups,
       colors: colors,
       typesEvents: typesEvents,
@@ -81,11 +81,11 @@ export default {
 
   methods: {
     deleteModalHandler (id) {
-      this.deleteEventDialog = true
+      this.showDeleteEventDialog = true
       this.deletedEventId = id
     },
     deleteEvent () {
-      this.deleteEventDialog = false
+      this.showDeleteEventDialog = false
       this.$store.commit('deleteEvent', this.deletedEventId)
     },
     updateEvent (event) {
@@ -97,7 +97,7 @@ export default {
       const currentEvent = event
 
       currentEvent.id = currentEventId
-      this.addEventDialog = false
+      this.showAddEventDialog = false
       this.$store.commit('addEvent', event)
     }
   }

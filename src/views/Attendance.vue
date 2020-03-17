@@ -19,35 +19,26 @@
       v-row
         v-col(cols="12")
           h1 Таблица посещений
+
         v-col(cols="12")
-          h2 Младшая группа
+          h2.mb-2 Младшая группа
+          AttendanceTable(
+            :dates="datesLessons"
+            :group="lowGroup"
+          )
+
         v-col(cols="12")
-          h2 Средняя группа
+          h2.mb-2 Средняя группа
+          AttendanceTable(
+            :dates="datesLessons"
+            :group="midGroup"
+          )
+
         v-col(cols="12")
-          v-card
-            v-simple-table
-              template(v-slot:default)
-                thead
-                  tr
-                    th.text-left ФИО
-                    th.text-center(
-                      v-for="item in datesLessons"
-                    ) {{ item.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D, YYYY') }}
-                tbody
-                  tr(
-                    v-for="item in group"
-                    :key="item.id"
-                  )
-                    td.text-left {{ item.name }}
-                    td.text-center.border(
-                      v-for="date in datesLessons"
-                      :key="date.id"
-                    ) {{ getCellContent(item.id, date.id) }}
-        v-col(cols="12")
-          h2 Старшая группа
+          h2.mb-2 Старшая группа
 
     v-btn(
-      class="btn" color="green" fab large
+      class="btn" color="blue" fab large
       bottom absolute right
       @click="addEventDialog = true"
     )
@@ -55,6 +46,7 @@
 </template>
 
 <script>
+import AttendanceTable from '@/components/AttendanceTable'
 import AddEventModal from '@/components/AddEventModal'
 import { colors, groups, typesEvents } from '../constants'
 
@@ -62,6 +54,7 @@ export default {
   name: 'Attendance',
 
   components: {
+    AttendanceTable,
     AddEventModal
   },
 
@@ -84,19 +77,15 @@ export default {
     datesLessons () {
       return this.$store.getters.lessonsEvents
     },
-    group () {
-      return this.students.filter(gr => gr.group === 'Средняя')
+    lowGroup () {
+      return this.students.filter(student => student.group === 'Младшая')
+    },
+    midGroup () {
+      return this.students.filter(student => student.group === 'Средняя')
     }
   },
 
   methods: {
-    getCellContent (id, dateId) {
-      const absenteeList = this.$store.getters.eventById(dateId).absenteeList
-
-      if (absenteeList.find(item => item.id === id)) {
-        return 'Нет'
-      }
-    },
     addEvent (event) {
       const eventsLength = this.events.length
       const currentEventId = eventsLength + 1
@@ -109,10 +98,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.border {
-  border-left: 1px solid #e0e0e0;
-  cursor: pointer;
-}
-</style>

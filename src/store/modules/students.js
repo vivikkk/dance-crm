@@ -71,9 +71,9 @@ export default {
     },
     {
       id: 5,
-      name: 'Авдотья',
+      name: 'Авдотья Захаровна Игнатьева',
       dateOfBirthday: '',
-      group: 'Старшая',
+      group: 'Младшая',
       school: '',
       classStudy: '',
       adress: {

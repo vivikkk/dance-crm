@@ -42,14 +42,14 @@ const typesEvents = [
 ]
 
 const colors = [
+  'blue',
   'indigo',
   'deep-purple',
   'cyan',
   'green',
   'orange',
   'red',
-  'grey darken-1',
-  'blue'
+  'grey darken-1'
 ]
 
 export {
