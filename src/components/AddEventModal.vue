@@ -10,8 +10,9 @@ v-card
     class="mt-4"
   )
     v-select(
-      label="Тип занятия"
+      label="Тип события"
       v-model="event.name"
+      :disabled="isSimpleLesson"
       :items="typesEvents"
     )
     v-select(
@@ -62,6 +63,7 @@ v-card
         ) Ок
 
     v-menu(
+      v-if="!isSimpleLesson"
       ref="endTimeMenu"
       v-model="endTimeMenu"
       :close-on-content-click="false"
@@ -116,6 +118,10 @@ export default {
   name: 'AddEventModal',
 
   props: {
+    isSimpleLesson: {
+      type: Boolean,
+      required: false
+    },
     groups: {
       type: Array,
       required: true
@@ -140,8 +146,15 @@ export default {
         start: null,
         end: null,
         description: null,
-        group: []
+        group: [],
+        absenteeList: []
       }
+    }
+  },
+
+  mounted () {
+    if (this.isSimpleLesson) {
+      this.event.name = 'Занятие'
     }
   },
 

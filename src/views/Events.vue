@@ -23,6 +23,7 @@ v-container
     v-if="addEventDialog"
     v-model="addEventDialog"
     max-width="500px"
+    persistent
   )
     AddEventModal(
       :groups="groups"
@@ -91,6 +92,11 @@ export default {
       this.$store.commit('updateEvent', event)
     },
     addEvent (event) {
+      const eventsLength = this.events.length
+      const currentEventId = eventsLength + 1
+      const currentEvent = event
+
+      currentEvent.id = currentEventId
       this.addEventDialog = false
       this.$store.commit('addEvent', event)
     }

@@ -33,7 +33,7 @@ export default {
     {
       id: 4,
       name: 'Занятие',
-      start: '2020-03-01',
+      start: '2020-03-03',
       end: null,
       description: null,
       group: ['Средняя'],
@@ -70,6 +70,9 @@ export default {
   getters: {
     events (state) {
       return state
+    },
+    lessonsEvents (state) {
+      return state.filter(item => item.name === 'Занятие')
     },
     eventById (state) {
       return id => {
