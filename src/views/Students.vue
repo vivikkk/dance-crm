@@ -39,7 +39,7 @@ v-container
 
   v-btn(
     class="btn" color="green" fab large bottom absolute right
-    @click="newUserHandler"
+    @click="newStudentHandler"
   )
     v-icon(color="white") mdi-account-plus
 </template>
@@ -139,11 +139,6 @@ export default {
 
   // TODO: one handler
   methods: {
-    newUserHandler (student) {
-      this.studentId = student.id
-      this.isEditModal = true
-      this.dialog = true
-    },
     deleteStudentHandler (student) {
       this.studentId = student.id
       this.isEditModal = false
@@ -151,6 +146,11 @@ export default {
     },
     editStudentHandler (student) {
       this.studentId = student.id
+      this.isEditModal = true
+      this.dialog = true
+    },
+    newStudentHandler () {
+      this.studentId = null
       this.isEditModal = true
       this.dialog = true
     },

@@ -70,7 +70,7 @@ export default {
       }
     },
     {
-      id: 5,
+      id: 4,
       name: 'Авдотья Захаровна Игнатьева',
       dateOfBirthday: '',
       group: 'Младшая',
