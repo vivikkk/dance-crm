@@ -18,24 +18,24 @@
     v-row
       v-row
         v-col(cols="12")
-          h1 Таблица посещений
+          h1 Таблица посещений групп
 
         v-col(cols="12")
-          h2.mb-2 Младшая группа
+          h2.mb-2 Младшая
           AttendanceTable(
             :dates="datesLessons"
             :group="lowGroup"
           )
 
         v-col(cols="12")
-          h2.mb-2 Средняя группа
+          h2.mb-2 Средняя
           AttendanceTable(
             :dates="datesLessons"
             :group="midGroup"
           )
 
         v-col(cols="12")
-          h2.mb-2 Старшая группа
+          h2.mb-2 Старшая
 
     v-btn(
       class="btn" color="blue" fab large

@@ -11,6 +11,10 @@ export default {
         {
           id: 1,
           description: 'Тоска'
+        },
+        {
+          id: 5,
+          description: 'Приуныла'
         }
       ]
     },
@@ -62,6 +66,7 @@ export default {
         event[key] = payload[key]
       })
     },
+    // TODO: sort
     addEvent (state, payload) {
       state.push(payload)
     }
