@@ -25,6 +25,7 @@
           AttendanceTable(
             :dates="datesLessons"
             :group="lowGroup"
+            @update="update"
           )
 
         v-col(cols="12")
@@ -32,10 +33,16 @@
           AttendanceTable(
             :dates="datesLessons"
             :group="midGroup"
+            @update="update"
           )
 
         v-col(cols="12")
           h2.mb-2 Старшая
+          AttendanceTable(
+            :dates="datesLessons"
+            :group="highGroup"
+            @update="update"
+          )
 
     v-btn(
       class="btn" color="blue" fab large
@@ -82,6 +89,9 @@ export default {
     },
     midGroup () {
       return this.students.filter(student => student.group === 'Средняя')
+    },
+    highGroup () {
+      return this.students.filter(student => student.group === 'Старшая')
     }
   },
 
@@ -94,6 +104,10 @@ export default {
       currentEvent.id = currentEventId
       this.addEventDialog = false
       this.$store.commit('addEvent', event)
+    },
+
+    update (obj) {
+      this.$store.commit('updateAttendance', obj)
     }
   }
 }

@@ -69,6 +69,24 @@ export default {
     // TODO: sort
     addEvent (state, payload) {
       state.push(payload)
+    },
+    updateAttendance (state, payload) {
+      const event = state.find(item => item.id === payload.eventId)
+      const absenteeList = event.absenteeList
+      const student = absenteeList.find(item => item.id === payload.studentId)
+
+      if (!payload.reason) {
+        const index = absenteeList.map(item => item.id).indexOf(payload.studentId)
+
+        absenteeList.splice(index, 1)
+      } else if (payload.reason && student) {
+        student.description = payload.reason
+      } else {
+        absenteeList.push({
+          id: payload.studentId,
+          description: payload.reason
+        })
+      }
     }
   },
   actions: {},

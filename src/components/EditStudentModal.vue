@@ -182,10 +182,15 @@ export default {
     }
   },
 
-  mounted () {
+  created () {
     if (this.student.name) {
       this.isEditModal = true
-      this.currentStudent = Object.assign({}, this.student)
+      this.currentStudent = {
+        ...this.student,
+        adress: { ...this.student.adress },
+        parents: { ...this.student.parents },
+        phones: { ...this.student.phones }
+      }
     } else {
       this.isEditModal = false
     }

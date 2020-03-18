@@ -48,9 +48,9 @@ export default {
     },
     {
       id: 3,
-      name: 'Виктория',
+      name: 'Виктория Игоревна Фролова',
       dateOfBirthday: '',
-      group: 'Средняя',
+      group: 'Старшая',
       school: 'МКОУ-гимназия №6',
       classStudy: 5,
       adress: {

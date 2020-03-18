@@ -17,7 +17,7 @@ v-card
           td.text-center.border(
             v-for="date in dates"
             :key="date.id"
-            @click="test($event, date, student)"
+            @click="clickCellHandler($event, date, student)"
             :class="{'blue-grey lighten-4': getCellColor(student.id, date.id)}"
           ) {{ getCellContent(student.id, date.id) }}
 
@@ -25,7 +25,7 @@ v-card
           v-model="selectedOpen"
           v-if="selectedOpen"
           :close-on-content-click="false"
-          :activator="selectedElement"
+          :activator="selectedNativeElement"
           offset-x
         )
           v-card(
@@ -35,20 +35,24 @@ v-card
               dark
               color="blue"
             )
-              v-toolbar-title {{ selectedStudent.name }}
-            v-card-text
+              v-toolbar-title
+                span {{ selectedStudent.name }}
+                .caption Дата: {{ selectedDate.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D, YYYY') }}
+            v-card-text.pb-0
               v-text-field(
                 label="Причина отсутствия"
+                v-model="studentReason"
               )
+
             v-card-actions
               v-spacer
               v-btn(
                 text
-                @click=""
+                @click="selectedOpen = false"
               ) Отмена
               v-btn(
                 text color="green"
-                @click=""
+                @click="update"
               ) Сохранить
 </template>
 
@@ -70,9 +74,10 @@ export default {
   data () {
     return {
       selectedOpen: false,
-      selectedElement: null,
+      selectedNativeElement: null,
+      selectedDate: null,
       selectedStudent: null,
-      selectedDate: null
+      studentReason: null
     }
   },
 
@@ -92,11 +97,27 @@ export default {
         return absenteeList.find(item => item.id === studentId).description
       }
     },
-    test (nativeEvent, date, student) {
-      this.selectedElement = nativeEvent.target
+    clickCellHandler (nativeEvent, date, student) {
+      const reason = date.absenteeList.find(item => item.id === student.id)
+
+      this.studentReason = reason ? reason.description : null
+      this.selectedNativeElement = nativeEvent.target
       this.selectedStudent = student
+      this.selectedDate = date
+
       // eslint-disable-next-line no-return-assign
       setTimeout(() => this.selectedOpen = true, 10)
+    },
+
+    update () {
+      const obj = {
+        eventId: this.selectedDate.id,
+        studentId: this.selectedStudent.id,
+        reason: this.studentReason
+      }
+
+      this.$emit('update', obj)
+      this.selectedOpen = false
     }
   }
 }
