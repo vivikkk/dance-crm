@@ -6,7 +6,7 @@ export default {
       start: '2020-03-01',
       end: null,
       description: null,
-      group: ['Средняя'],
+      group: ['Младшая', 'Средняя'],
       absenteeList: [
         {
           id: 1,
@@ -51,6 +51,15 @@ export default {
           description: 'Тошнит'
         }
       ]
+    },
+    {
+      id: 5,
+      name: 'Занятие',
+      start: '2020-03-05',
+      end: null,
+      description: null,
+      group: ['Младшая', 'Средняя'],
+      absenteeList: []
     }
   ],
   mutations: {
@@ -71,20 +80,25 @@ export default {
       state.push(payload)
     },
     updateAttendance (state, payload) {
-      const event = state.find(item => item.id === payload.eventId)
+      const {
+        reason,
+        eventId,
+        studentId
+      } = payload
+      const event = state.find(item => item.id === eventId)
       const absenteeList = event.absenteeList
-      const student = absenteeList.find(item => item.id === payload.studentId)
+      const student = absenteeList.find(item => item.id === studentId)
 
-      if (!payload.reason) {
-        const index = absenteeList.map(item => item.id).indexOf(payload.studentId)
+      if (!reason) {
+        const index = absenteeList.map(item => item.id).indexOf(studentId)
 
         absenteeList.splice(index, 1)
-      } else if (payload.reason && student) {
-        student.description = payload.reason
+      } else if (reason && student) {
+        student.description = reason
       } else {
         absenteeList.push({
-          id: payload.studentId,
-          description: payload.reason
+          id: studentId,
+          description: reason
         })
       }
     }

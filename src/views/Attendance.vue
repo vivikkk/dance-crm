@@ -16,33 +16,32 @@
       )
 
     v-row
-      v-row
-        v-col(cols="12")
-          h1 Таблица посещений групп
+      v-col(cols="12")
+        h1 Таблица посещений групп
 
-        v-col(cols="12")
-          h2.mb-2 Младшая
-          AttendanceTable(
-            :dates="datesLessons"
-            :group="lowGroup"
-            @update="update"
-          )
+      v-col(cols="12")
+        h2.mb-2 Младшая
+        AttendanceTable(
+          :dates="lowGroupLessons"
+          :group="lowGroupStudents"
+          @update="update"
+        )
 
-        v-col(cols="12")
-          h2.mb-2 Средняя
-          AttendanceTable(
-            :dates="datesLessons"
-            :group="midGroup"
-            @update="update"
-          )
+      v-col(cols="12")
+        h2.mb-2 Средняя
+        AttendanceTable(
+          :dates="midGroupLessons"
+          :group="midGroupStudents"
+          @update="update"
+        )
 
-        v-col(cols="12")
-          h2.mb-2 Старшая
-          AttendanceTable(
-            :dates="datesLessons"
-            :group="highGroup"
-            @update="update"
-          )
+      v-col(cols="12")
+        h2.mb-2 Старшая
+        AttendanceTable(
+          :dates="highGroupLessons"
+          :group="highGroupStudents"
+          @update="update"
+        )
 
     v-btn(
       class="btn" color="blue" fab large
@@ -56,6 +55,7 @@
 import AttendanceTable from '@/components/AttendanceTable'
 import AddEventModal from '@/components/AddEventModal'
 import { colors, groups, typesEvents } from '../constants'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Attendance',
@@ -75,22 +75,39 @@ export default {
   },
 
   computed: {
-    students () {
-      return this.$store.getters.students
+    ...mapGetters([
+      'students',
+      'events',
+      'lessonsEvents'
+    ]),
+    lowGroupLessons () {
+      return this.lessonsEvents.filter(
+        lesson => lesson.group.find(
+          group => group === 'Младшая'
+        )
+      )
     },
-    events () {
-      return this.$store.getters.events
+    midGroupLessons () {
+      return this.lessonsEvents.filter(
+        lesson => lesson.group.find(
+          group => group === 'Средняя'
+        )
+      )
     },
-    datesLessons () {
-      return this.$store.getters.lessonsEvents
+    highGroupLessons () {
+      return this.lessonsEvents.filter(
+        lesson => lesson.group.find(
+          group => group === 'Старшая'
+        )
+      )
     },
-    lowGroup () {
+    lowGroupStudents () {
       return this.students.filter(student => student.group === 'Младшая')
     },
-    midGroup () {
+    midGroupStudents () {
       return this.students.filter(student => student.group === 'Средняя')
     },
-    highGroup () {
+    highGroupStudents () {
       return this.students.filter(student => student.group === 'Старшая')
     }
   },

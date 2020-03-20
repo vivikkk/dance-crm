@@ -18,7 +18,6 @@ v-card
             v-for="date in dates"
             :key="date.id"
             @click="clickCellHandler($event, date, student)"
-            :class="{'blue-grey lighten-4': getCellColor(student.id, date.id)}"
           ) {{ getCellContent(student.id, date.id) }}
 
         v-menu(
@@ -82,14 +81,6 @@ export default {
   },
 
   methods: {
-    getCellColor (studentId, dateId) {
-      const absenteeList = this.$store.getters.eventById(dateId).absenteeList
-
-      if (absenteeList.find(item => item.id === studentId)) {
-        return true
-      }
-      return false
-    },
     getCellContent (studentId, dateId) {
       const absenteeList = this.$store.getters.eventById(dateId).absenteeList
 

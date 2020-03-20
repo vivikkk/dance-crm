@@ -178,6 +178,7 @@ v-row(
               ) Отмена
               v-btn(
                 text color="green"
+                :disabled="!valid"
                 @click="update"
               ) Сохранить
 </template>
@@ -230,6 +231,9 @@ export default {
   },
 
   computed: {
+    valid () {
+      return this.selectedEvent.start && this.selectedEvent.name
+    },
     title () {
       const { start, end } = this
       if (!start || !end) {
