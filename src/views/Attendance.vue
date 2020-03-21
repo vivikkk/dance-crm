@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container
+  v-container(fluid)
     v-dialog(
       v-if="addEventDialog"
       v-model="addEventDialog"
@@ -27,8 +27,18 @@
           @update="update"
         )
 
+      // TODO: REFACTOR LAST YEAR
       v-col(cols="12")
         h2.mb-2 Средняя
+        v-tabs(
+          background-color="primary"
+          center-active
+          dark
+        )
+          v-tab(
+            v-for="(item, index) in getDatesForTabs"
+            :key="index"
+          ) {{ item | dateParse('YYYY-MM-DD') | dateFormat('MMM') }} - {{ getNextMonth(item) | dateParse('YYYY-MM-DD') | dateFormat('MMM') }}
         AttendanceTable(
           :dates="midGroupLessons"
           :group="midGroupStudents"
@@ -78,7 +88,10 @@ export default {
     ...mapGetters([
       'students',
       'events',
-      'lessonsEvents'
+      'lessonsEvents',
+      'lessonsDates',
+      'firstLessonDate',
+      'lastLessonDate'
     ]),
     lowGroupLessons () {
       return this.lessonsEvents.filter(
@@ -109,10 +122,28 @@ export default {
     },
     highGroupStudents () {
       return this.students.filter(student => student.group === 'Старшая')
+    },
+    getDatesForTabs () {
+      const datesToTabArr = []
+      const date = new Date(this.firstLessonDate)
+
+      do {
+        datesToTabArr.push(date.toISOString().substring(0, 10))
+        date.setMonth(date.getMonth() + 1)
+      } while (date.toISOString() < this.lastLessonDate)
+
+      datesToTabArr.push(this.lastLessonDate)
+      return datesToTabArr.filter((element, index) => (index % 2 === 0))
     }
   },
 
   methods: {
+    getNextMonth (date) {
+      const nextMonth = new Date(date)
+      nextMonth.setMonth(nextMonth.getMonth() + 1)
+
+      return nextMonth.toISOString().substring(0, 10)
+    },
     addEvent (event) {
       const eventsLength = this.events.length
       const currentEventId = eventsLength + 1
@@ -122,7 +153,6 @@ export default {
       this.addEventDialog = false
       this.$store.commit('addEvent', event)
     },
-
     update (obj) {
       this.$store.commit('updateAttendance', obj)
     }

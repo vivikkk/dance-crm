@@ -7,7 +7,7 @@ v-card
           th.text-left ФИО
           th.text-center.border(
             v-for="date in dates"
-          ) {{ date.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D, YYYY') }}
+          ) {{ date.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D') }}
       tbody
         tr(
           v-for="student in group"

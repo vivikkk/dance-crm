@@ -3,7 +3,7 @@ export default {
     {
       id: 1,
       name: 'Занятие',
-      start: '2020-03-01',
+      start: '2020-07-01',
       end: null,
       description: null,
       group: ['Младшая', 'Средняя'],
@@ -55,10 +55,19 @@ export default {
     {
       id: 5,
       name: 'Занятие',
-      start: '2020-03-05',
+      start: '2020-04-20',
       end: null,
       description: null,
       group: ['Младшая', 'Средняя'],
+      absenteeList: []
+    },
+    {
+      id: 6,
+      name: 'Занятие',
+      start: '2020-03-01',
+      end: null,
+      description: null,
+      group: ['Средняя', 'Старшая'],
       absenteeList: []
     }
   ],
@@ -75,7 +84,6 @@ export default {
         event[key] = payload[key]
       })
     },
-    // TODO: sort
     addEvent (state, payload) {
       state.push(payload)
     },
@@ -110,6 +118,26 @@ export default {
     },
     lessonsEvents (state) {
       return state.filter(item => item.name === 'Занятие')
+        .sort(function (a, b) {
+          if (a.start > b.start) {
+            return 1
+          }
+          if (a.start < b.start) {
+            return -1
+          }
+          return 0
+        })
+    },
+    lessonsDates (state, getters) {
+      return getters.lessonsEvents.map(lesson => lesson.start)
+    },
+    firstLessonDate (state, getters) {
+      return getters.lessonsDates[0]
+    },
+    lastLessonDate (state, getters) {
+      const datesLength = getters.lessonsDates.length
+
+      return getters.lessonsDates[datesLength - 1]
     },
     eventById (state) {
       return id => {
