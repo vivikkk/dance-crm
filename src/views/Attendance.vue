@@ -22,6 +22,7 @@
       v-col(cols="12")
         h2.mb-2 Младшая
         AttendanceTable(
+          :tabs="getDatesForTabs"
           :dates="lowGroupLessons"
           :group="lowGroupStudents"
           @update="update"
@@ -30,16 +31,8 @@
       // TODO: REFACTOR LAST YEAR
       v-col(cols="12")
         h2.mb-2 Средняя
-        v-tabs(
-          background-color="primary"
-          center-active
-          dark
-        )
-          v-tab(
-            v-for="(item, index) in getDatesForTabs"
-            :key="index"
-          ) {{ item | dateParse('YYYY-MM-DD') | dateFormat('MMM') }} - {{ getNextMonth(item) | dateParse('YYYY-MM-DD') | dateFormat('MMM') }}
         AttendanceTable(
+          :tabs="getDatesForTabs"
           :dates="midGroupLessons"
           :group="midGroupStudents"
           @update="update"
@@ -48,6 +41,7 @@
       v-col(cols="12")
         h2.mb-2 Старшая
         AttendanceTable(
+          :tabs="getDatesForTabs"
           :dates="highGroupLessons"
           :group="highGroupStudents"
           @update="update"
@@ -128,22 +122,16 @@ export default {
       const date = new Date(this.firstLessonDate)
 
       do {
-        datesToTabArr.push(date.toISOString().substring(0, 10))
+        datesToTabArr.push(date.toISOString().substring(0, 7))
         date.setMonth(date.getMonth() + 1)
       } while (date.toISOString() < this.lastLessonDate)
 
-      datesToTabArr.push(this.lastLessonDate)
+      datesToTabArr.push(this.lastLessonDate.substring(0, 7))
       return datesToTabArr.filter((element, index) => (index % 2 === 0))
     }
   },
 
   methods: {
-    getNextMonth (date) {
-      const nextMonth = new Date(date)
-      nextMonth.setMonth(nextMonth.getMonth() + 1)
-
-      return nextMonth.toISOString().substring(0, 10)
-    },
     addEvent (event) {
       const eventsLength = this.events.length
       const currentEventId = eventsLength + 1

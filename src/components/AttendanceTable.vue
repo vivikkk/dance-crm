@@ -1,58 +1,70 @@
 <template lang="pug">
-v-card
-  v-simple-table
-    template(v-slot:default)
-      thead
-        tr
-          th.text-left ФИО
-          th.text-center.border(
-            v-for="date in dates"
-          ) {{ date.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D') }}
-      tbody
-        tr(
-          v-for="student in group"
-          :key="student.id"
-        )
-          td.text-left {{ student.name }}
-          td.text-center.border(
-            v-for="date in dates"
-            :key="date.id"
-            @click="clickCellHandler($event, date, student)"
-          ) {{ getCellContent(student.id, date.id) }}
+div
+  v-tabs(
+    background-color="primary"
+    center-active
+    dark
+  )
+    v-tab(
+      v-for="(item, index) in tabs"
+      :key="index"
+      @click="setDatesRange(item)"
+    ) {{ item | dateParse('YYYY-MM') | dateFormat('MMM') }} - {{ getNextMonth(item) | dateParse('YYYY-MM') | dateFormat('MMM') }}
 
-        v-menu(
-          v-model="selectedOpen"
-          v-if="selectedOpen"
-          :close-on-content-click="false"
-          :activator="selectedNativeElement"
-          offset-x
-        )
-          v-card(
-            color="grey lighten-4" max-width="550px" min-width="350px" flat
+  v-card
+    v-simple-table
+      template(v-slot:default)
+        thead
+          tr
+            th.text-left ФИО
+            th.text-center.border(
+              v-for="date in datesRange"
+            ) {{ date.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D') }}
+        tbody
+          tr(
+            v-for="student in group"
+            :key="student.id"
           )
-            v-toolbar(
-              dark
-              color="blue"
-            )
-              v-toolbar-title
-                span {{ selectedStudent.name }}
-                .caption Дата: {{ selectedDate.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D, YYYY') }}
-            v-card-text.pb-0
-              v-text-field(
-                label="Причина отсутствия"
-                v-model="studentReason"
-              )
+            td.text-left {{ student.name }}
+            td.text-center.border(
+              v-for="date in datesRange"
+              :key="date.id"
+              @click="clickCellHandler($event, date, student)"
+            ) {{ getCellContent(student.id, date.id) }}
 
-            v-card-actions
-              v-spacer
-              v-btn(
-                text
-                @click="selectedOpen = false"
-              ) Отмена
-              v-btn(
-                text color="green"
-                @click="update"
-              ) Сохранить
+          v-menu(
+            v-model="selectedOpen"
+            v-if="selectedOpen"
+            :close-on-content-click="false"
+            :activator="selectedNativeElement"
+            offset-x
+          )
+            v-card(
+              color="grey lighten-4" max-width="550px" min-width="350px" flat
+            )
+              v-toolbar(
+                dark
+                color="blue"
+              )
+                v-toolbar-title
+                  span {{ selectedStudent.name }}
+                  .caption Дата: {{ selectedDate.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D, YYYY') }}
+              v-card-text.pb-0
+                v-text-field(
+                  label="Причина отсутствия"
+                  v-model="studentReason"
+                )
+
+              v-card-actions
+                v-spacer
+                v-btn(
+                  text
+                  @click="selectedOpen = false"
+                ) Отмена
+                v-btn(
+                  text color="green"
+                  @click="update"
+                ) Сохранить
 </template>
 
 <script>
@@ -67,6 +79,10 @@ export default {
     group: {
       type: Array,
       required: true
+    },
+    tabs: {
+      type: Array,
+      required: true
     }
   },
 
@@ -76,11 +92,30 @@ export default {
       selectedNativeElement: null,
       selectedDate: null,
       selectedStudent: null,
-      studentReason: null
+      studentReason: null,
+      currentMonth: '2020-03'
+    }
+  },
+  // TODO: mounted date
+  computed: {
+    datesRange () {
+      return this.dates.filter(date => (
+        date.start.includes(this.currentMonth) || date.start.includes(this.getNextMonth(this.currentMonth))
+      ))
     }
   },
 
   methods: {
+    setDatesRange (date) {
+      this.currentMonth = date
+    },
+    getNextMonth (date) {
+      const nextMonth = new Date(date)
+
+      nextMonth.setMonth(nextMonth.getMonth() + 1)
+
+      return nextMonth.toISOString().substring(0, 7)
+    },
     getCellContent (studentId, dateId) {
       const absenteeList = this.$store.getters.eventById(dateId).absenteeList
 
@@ -99,7 +134,6 @@ export default {
       // eslint-disable-next-line no-return-assign
       setTimeout(() => this.selectedOpen = true, 10)
     },
-
     update () {
       const obj = {
         eventId: this.selectedDate.id,
