@@ -1,99 +1,13 @@
+import firebase from 'firebase/app'
+import 'firebase/database'
+
 export default {
-  state: [
-    {
-      id: 1,
-      name: 'Ольга Николаевна Мухтарова',
-      dateOfBirthday: '2008-03-15',
-      group: 'Средняя',
-      school: 'МКОУ СОШ №1',
-      classStudy: 10,
-      adress: {
-        student: 'Парковая 1-24',
-        parents: ''
-      },
-      parents: {
-        mother: 'Светлана Ивановна Мухтарова',
-        father: 'Светлан Иванович Мухтаров',
-        grandMother: 'Клавдия Ивановна Мухтарова'
-      },
-      phones: {
-        student: '+79201111111',
-        mother: '+79205645332',
-        father: '+79205645432',
-        grandMother: ''
-      }
-    },
-    {
-      id: 2,
-      name: 'Василиса Игоревна Твердолобова',
-      dateOfBirthday: '2002-01-01 ',
-      group: 'Средняя',
-      school: 'МКОУ-гимназия №6',
-      classStudy: 8,
-      adress: {
-        student: 'Первомайская, 23 а-3',
-        parents: 'Бессолова, 3-6'
-      },
-      parents: {
-        mother: '',
-        father: 'Кольбас Сергеевич Твердолобов',
-        grandMother: ''
-      },
-      phones: {
-        student: '+79202222222',
-        mother: '+79275111332',
-        father: '',
-        grandMother: ''
-      }
-    },
-    {
-      id: 3,
-      name: 'Виктория Игоревна Фролова',
-      dateOfBirthday: '',
-      group: 'Старшая',
-      school: 'МКОУ-гимназия №6',
-      classStudy: 5,
-      adress: {
-        student: '',
-        parents: ''
-      },
-      parents: {
-        mother: '',
-        father: '',
-        grandMother: ''
-      },
-      phones: {
-        student: '',
-        mother: '',
-        father: '',
-        grandMother: ''
-      }
-    },
-    {
-      id: 4,
-      name: 'Авдотья Захаровна Игнатьева',
-      dateOfBirthday: '',
-      group: 'Младшая',
-      school: '',
-      classStudy: '',
-      adress: {
-        student: '',
-        parents: ''
-      },
-      parents: {
-        mother: '',
-        father: '',
-        grandMother: ''
-      },
-      phones: {
-        student: '',
-        mother: '',
-        father: '',
-        grandMother: ''
-      }
-    }
-  ],
+  state: [],
+
   mutations: {
+    loadStudents (state, payload) {
+      payload.forEach(item => state.push(item))
+    },
     deleteStudent (state, payload) {
       const index = state.map(item => item.id).indexOf(payload)
 
@@ -110,7 +24,79 @@ export default {
       state.push(payload)
     }
   },
-  actions: {},
+
+  actions: {
+    async fetchStudents ({ commit }, payload) {
+      commit('loading', true)
+
+      const resultStudents = []
+
+      try {
+        const fbVal = await firebase.database().ref('students').once('value')
+        const students = fbVal.val()
+
+        Object.keys(students).forEach(key => {
+          const student = students[key]
+          student.id = key
+
+          resultStudents.push(
+            student
+          )
+        })
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+
+      commit('loadStudents', resultStudents)
+    },
+    async deleteStudent ({ commit }, payload) {
+      commit('loading', true)
+
+      try {
+        await firebase.database().ref(`/students/${payload}`).remove()
+
+        commit('deleteStudent', payload)
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    },
+    async updateStudent ({ commit }, payload) {
+      commit('loading', true)
+
+      try {
+        await firebase.database().ref('students').child(payload.id).update({
+          ...payload
+        })
+
+        commit('updateStudent', payload)
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    },
+    async addStudent ({ commit }, payload) {
+      commit('loading', true)
+
+      try {
+        const student = await firebase.database().ref('students').push(payload)
+
+        commit('addStudent', {
+          ...payload,
+          id: student.key
+        })
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    }
+  },
+
   getters: {
     students (state) {
       return state

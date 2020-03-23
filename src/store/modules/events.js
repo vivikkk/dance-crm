@@ -3,7 +3,7 @@ export default {
     {
       id: 1,
       name: 'Занятие',
-      start: '2020-07-01',
+      start: '2020-03-01',
       end: null,
       description: null,
       group: ['Младшая', 'Средняя'],
@@ -71,6 +71,7 @@ export default {
       absenteeList: []
     }
   ],
+
   mutations: {
     deleteEvent (state, payload) {
       const index = state.map(item => item.id).indexOf(payload)
@@ -111,7 +112,9 @@ export default {
       }
     }
   },
+
   actions: {},
+
   getters: {
     events (state) {
       return state

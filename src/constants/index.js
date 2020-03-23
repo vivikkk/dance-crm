@@ -20,9 +20,7 @@ const schools = [
 const groups = [
   'Младшая',
   'Средняя',
-  'Старшая',
-  'VIVA KIDS (Ст)',
-  'VIVA KIDS (Мл)'
+  'Старшая'
 ]
 
 const classes = []

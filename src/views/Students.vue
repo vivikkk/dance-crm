@@ -156,20 +156,15 @@ export default {
     },
     deleteStudent () {
       this.dialog = false
-      this.$store.commit('deleteStudent', this.studentId)
+      this.$store.dispatch('deleteStudent', this.studentId)
     },
     updateStudent (student) {
       this.dialog = false
-      this.$store.commit('updateStudent', student)
+      this.$store.dispatch('updateStudent', student)
     },
     addStudent (student) {
-      const studentsLength = this.students.length
-      const currentStudentId = studentsLength + 1
-      const currentStudent = student
-
-      currentStudent.id = currentStudentId
       this.dialog = false
-      this.$store.commit('addStudent', currentStudent)
+      this.$store.dispatch('addStudent', student)
     }
   }
 }

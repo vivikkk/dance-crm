@@ -2,6 +2,7 @@
   v-card
     v-card-title
       v-text-field(
+        :loading="loading"
         v-model="search"
         prepend-inner-icon="mdi-account-search"
         label="Поиск"
@@ -84,6 +85,12 @@ export default {
   data () {
     return {
       search: ''
+    }
+  },
+
+  computed: {
+    loading () {
+      return this.$store.getters.loading
     }
   },
 

@@ -1,6 +1,7 @@
 <template lang="pug">
 div
   v-tabs(
+    v-model="selectedTab"
     background-color="primary"
     center-active
     dark
@@ -93,27 +94,31 @@ export default {
       selectedDate: null,
       selectedStudent: null,
       studentReason: null,
-      currentMonth: '2020-03'
+      selectedTab: 1,
+      today: new Date().toISOString().substr(0, 7)
     }
   },
-  // TODO: mounted date
+
+  mounted () {
+    this.selectedTab = this.tabs.indexOf(this.today)
+  },
+
   computed: {
     datesRange () {
       return this.dates.filter(date => (
-        date.start.includes(this.currentMonth) || date.start.includes(this.getNextMonth(this.currentMonth))
+        date.start.includes(this.today) || date.start.includes(this.getNextMonth(this.today))
       ))
     }
   },
 
   methods: {
     setDatesRange (date) {
-      this.currentMonth = date
+      this.today = date
     },
     getNextMonth (date) {
       const nextMonth = new Date(date)
 
       nextMonth.setMonth(nextMonth.getMonth() + 1)
-
       return nextMonth.toISOString().substring(0, 7)
     },
     getCellContent (studentId, dateId) {

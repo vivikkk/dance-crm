@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import common from './modules/common'
 import students from './modules/students'
 import events from './modules/events'
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
 
   modules: {
     students,
-    events
+    events,
+    common
   }
 })

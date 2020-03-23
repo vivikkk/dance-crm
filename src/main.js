@@ -6,6 +6,7 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+import firebase from 'firebase/app'
 
 import Simple from './layouts/Simple'
 import Default from './layouts/Default'
@@ -32,6 +33,16 @@ Vue.use(VueFilterDateFormat, {
     'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
     'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
   ]
+})
+
+firebase.initializeApp({
+  apiKey: 'AIzaSyAwQwO535jd2kvtgTOkcl9aDe3T0KXomiw',
+  authDomain: 'dance-crm.firebaseapp.com',
+  databaseURL: 'https://dance-crm.firebaseio.com',
+  projectId: 'dance-crm',
+  storageBucket: 'dance-crm.appspot.com',
+  messagingSenderId: '531510708455',
+  appId: '1:531510708455:web:f97599600642ef98e63a42'
 })
 
 new Vue({
