@@ -45,6 +45,11 @@ v-row(
                 v-list-item-title Месяц
 
     v-sheet(height="600")
+      v-progress-linear(
+        v-if="loading"
+        indeterminate
+        dark flat color="blue darken-2"
+      )
       v-calendar(
         ref="calendar"
         v-model="focus"
@@ -231,6 +236,9 @@ export default {
   },
 
   computed: {
+    loading () {
+      return this.$store.getters.loading
+    },
     valid () {
       return this.selectedEvent.start && this.selectedEvent.name
     },

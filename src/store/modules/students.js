@@ -37,19 +37,18 @@ export default {
 
         Object.keys(students).forEach(key => {
           const student = students[key]
-          student.id = key
 
+          student.id = key
           resultStudents.push(
             student
           )
         })
+        commit('loadStudents', resultStudents)
         commit('loading', false)
       } catch (error) {
         commit('loading', false)
         throw error
       }
-
-      commit('loadStudents', resultStudents)
     },
     async deleteStudent ({ commit }, payload) {
       commit('loading', true)

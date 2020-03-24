@@ -159,7 +159,7 @@ export default {
       currentStudent: {
         id: '',
         name: '',
-        dateOfBirthday: null,
+        dateOfBirthday: '',
         group: '',
         school: '',
         classStudy: '',

@@ -1,78 +1,13 @@
+import firebase from 'firebase/app'
+import 'firebase/database'
+
 export default {
-  state: [
-    {
-      id: 1,
-      name: 'Занятие',
-      start: '2020-03-01',
-      end: null,
-      description: null,
-      group: ['Младшая', 'Средняя'],
-      absenteeList: [
-        {
-          id: 1,
-          description: 'Тоска'
-        },
-        {
-          id: 5,
-          description: 'Приуныла'
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Праздник',
-      start: '2020-03-12',
-      end: null,
-      description: null,
-      group: ['Средняя']
-    },
-    {
-      id: 3,
-      name: 'Мастер-класс',
-      start: '2020-03-05',
-      end: '2020-03-06',
-      description: 'К нам приедет Мега мастер',
-      group: ['VIVA KIDS (Ст)']
-    },
-    {
-      id: 4,
-      name: 'Занятие',
-      start: '2020-03-03',
-      end: null,
-      description: null,
-      group: ['Средняя'],
-      absenteeList: [
-        {
-          id: 1,
-          description: 'Еще раз тоска'
-        },
-        {
-          id: 3,
-          description: 'Тошнит'
-        }
-      ]
-    },
-    {
-      id: 5,
-      name: 'Занятие',
-      start: '2020-04-20',
-      end: null,
-      description: null,
-      group: ['Младшая', 'Средняя'],
-      absenteeList: []
-    },
-    {
-      id: 6,
-      name: 'Занятие',
-      start: '2020-03-01',
-      end: null,
-      description: null,
-      group: ['Средняя', 'Старшая'],
-      absenteeList: []
-    }
-  ],
+  state: [],
 
   mutations: {
+    loadEvents (state, payload) {
+      payload.forEach(item => state.push(item))
+    },
     deleteEvent (state, payload) {
       const index = state.map(item => item.id).indexOf(payload)
 
@@ -113,7 +48,74 @@ export default {
     }
   },
 
-  actions: {},
+  actions: {
+    async fetchEvents ({ commit }, payload) {
+      const resultEvents = []
+
+      commit('loading', true)
+      try {
+        const fbVal = await firebase.database().ref('events').once('value')
+        const events = fbVal.val()
+
+        Object.keys(events).forEach(key => {
+          const event = events[key]
+
+          event.id = key
+          resultEvents.push(
+            event
+          )
+        })
+        commit('loadEvents', resultEvents)
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    },
+    async deleteEvent ({ commit }, payload) {
+      commit('loading', true)
+
+      try {
+        await firebase.database().ref(`/events/${payload}`).remove()
+        commit('deleteEvent', payload)
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    },
+    async updateEvent ({ commit }, payload) {
+      commit('loading', true)
+
+      try {
+        await firebase.database().ref('events').child(payload.id).update({
+          ...payload
+        })
+
+        commit('updateEvent', payload)
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    },
+    async addEvent ({ commit }, payload) {
+      commit('loading', true)
+
+      try {
+        const event = await firebase.database().ref('events').push(payload)
+
+        commit('addEvent', {
+          ...payload,
+          id: event.key
+        })
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    }
+  },
 
   getters: {
     events (state) {

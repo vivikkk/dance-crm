@@ -10,6 +10,7 @@ const simpleLayout = 'simple-layout'
 export default {
   created () {
     this.$store.dispatch('fetchStudents')
+    this.$store.dispatch('fetchEvents')
   },
 
   computed: {

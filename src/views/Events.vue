@@ -1,6 +1,5 @@
 <template lang="pug">
 v-container
-  //TODO: modal in component
   v-dialog(
     v-model="showDeleteEventDialog"
     max-width="400px"
@@ -69,11 +68,14 @@ export default {
       groups: groups,
       colors: colors,
       typesEvents: typesEvents,
-      deletedEventId: null
+      eventId: null
     }
   },
 
   computed: {
+    loading () {
+      return this.$store.getters.loading
+    },
     events () {
       return this.$store.getters.events
     }
@@ -82,23 +84,18 @@ export default {
   methods: {
     deleteModalHandler (id) {
       this.showDeleteEventDialog = true
-      this.deletedEventId = id
+      this.eventId = id
     },
     deleteEvent () {
       this.showDeleteEventDialog = false
-      this.$store.commit('deleteEvent', this.deletedEventId)
+      this.$store.dispatch('deleteEvent', this.eventId)
     },
     updateEvent (event) {
-      this.$store.commit('updateEvent', event)
+      this.$store.dispatch('updateEvent', event)
     },
     addEvent (event) {
-      const eventsLength = this.events.length
-      const currentEventId = eventsLength + 1
-      const currentEvent = event
-
-      currentEvent.id = currentEventId
       this.showAddEventDialog = false
-      this.$store.commit('addEvent', event)
+      this.$store.dispatch('addEvent', event)
     }
   }
 }

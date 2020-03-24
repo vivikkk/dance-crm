@@ -141,11 +141,11 @@ export default {
       startTimeMenu: false,
       endTimeMenu: false,
       event: {
-        id: null,
-        name: null,
-        start: null,
-        end: null,
-        description: null,
+        id: '',
+        name: '',
+        start: '',
+        end: '',
+        description: '',
         group: [],
         absenteeList: []
       }
