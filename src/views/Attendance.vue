@@ -14,38 +14,58 @@
         @add="addEvent"
         @cancel="addEventDialog = false"
       )
-
+    // TODO: Loader
     v-row
       v-col(cols="12")
         h1 Таблица посещений групп
 
-      v-col(cols="12")
-        h2.mb-2 Младшая
-        AttendanceTable(
-          :tabs="getDatesForTabs"
-          :dates="lowGroupLessons"
-          :group="lowGroupStudents"
-          @update="update"
+      v-dialog(
+        v-model="isLoading"
+        persistent
+        width="300"
+      )
+        v-card(
+          color="primary" dark
         )
+          v-card-title Пожалуйста, подождите
+          v-card-text(class="pt-4")
+            v-progress-linear(
+              indeterminate
+              color="white"
+              class="mb-0"
+            )
 
-      // TODO: REFACTOR LAST YEAR
-      v-col(cols="12")
-        h2.mb-2 Средняя
-        AttendanceTable(
-          :tabs="getDatesForTabs"
-          :dates="midGroupLessons"
-          :group="midGroupStudents"
-          @update="update"
-        )
+      template(
+        v-if="!isLoading"
+      )
+        v-col(cols="12")
+          h2.mb-2 Младшая
+          AttendanceTable(
+            :tabs="getDatesForTabs"
+            :dates="lowGroupLessons"
+            :group="lowGroupStudents"
+            @update="update"
+          )
 
-      v-col(cols="12")
-        h2.mb-2 Старшая
-        AttendanceTable(
-          :tabs="getDatesForTabs"
-          :dates="highGroupLessons"
-          :group="highGroupStudents"
-          @update="update"
+        v-col(
+          cols="12"
         )
+          h2.mb-2 Средняя
+          AttendanceTable(
+            :tabs="getDatesForTabs"
+            :dates="midGroupLessons"
+            :group="midGroupStudents"
+            @update="update"
+          )
+
+        v-col(cols="12")
+          h2.mb-2 Старшая
+          AttendanceTable(
+            :tabs="getDatesForTabs"
+            :dates="highGroupLessons"
+            :group="highGroupStudents"
+            @update="update"
+          )
 
     v-btn(
       class="btn" color="blue" fab large
@@ -74,11 +94,27 @@ export default {
       addEventDialog: false,
       groups: groups,
       colors: colors,
-      typesEvents: typesEvents
+      typesEvents: typesEvents,
+      isLoading: true
+    }
+  },
+
+  mounted () {
+    this.isLoading = this.loading
+  },
+
+  watch: {
+    loading (newValue, oldValue) {
+      setTimeout(() => {
+        this.isLoading = false
+      }, 500)
     }
   },
 
   computed: {
+    loading () {
+      return this.$store.getters.loading
+    },
     ...mapGetters([
       'students',
       'events',
@@ -133,13 +169,8 @@ export default {
 
   methods: {
     addEvent (event) {
-      const eventsLength = this.events.length
-      const currentEventId = eventsLength + 1
-      const currentEvent = event
-
-      currentEvent.id = currentEventId
       this.addEventDialog = false
-      this.$store.commit('addEvent', event)
+      this.$store.dispatch('addEvent', event)
     },
     update (obj) {
       this.$store.commit('updateAttendance', obj)

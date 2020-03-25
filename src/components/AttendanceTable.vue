@@ -104,6 +104,9 @@ export default {
   },
 
   computed: {
+    loading () {
+      return this.$store.getters.loading
+    },
     datesRange () {
       return this.dates.filter(date => (
         date.start.includes(this.today) || date.start.includes(this.getNextMonth(this.today))
@@ -122,7 +125,7 @@ export default {
       return nextMonth.toISOString().substring(0, 7)
     },
     getCellContent (studentId, dateId) {
-      const absenteeList = this.$store.getters.eventById(dateId).absenteeList
+      const absenteeList = this.$store.getters.eventById(dateId).absenteeList || []
 
       if (absenteeList.find(item => item.id === studentId)) {
         return absenteeList.find(item => item.id === studentId).description

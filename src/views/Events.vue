@@ -54,7 +54,6 @@ import EventsCalendar from '@/components/EventsCalendar'
 import AddEventModal from '@/components/AddEventModal'
 import { colors, groups, typesEvents } from '../constants'
 
-// TODO: event time
 export default {
   components: {
     EventsCalendar,
