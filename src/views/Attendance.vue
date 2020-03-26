@@ -173,7 +173,7 @@ export default {
       this.$store.dispatch('addEvent', event)
     },
     updateHandler (obj) {
-      this.$store.dispatch('updateAttendance', obj)
+      // this.$store.dispatch('addAbsentStudent', obj)
     }
   }
 }

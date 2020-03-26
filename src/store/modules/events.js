@@ -49,11 +49,12 @@ export default {
         throw error
       }
     },
-    async deleteEvent ({ commit }, payload) {
+    async deleteEvent ({ commit, dispatch }, payload) {
       commit('loading', true)
 
       try {
         await firebase.database().ref(`/events/${payload}`).remove()
+        dispatch('deleteAbsentEvent', payload)
         commit('deleteEvent', payload)
         commit('loading', false)
       } catch (error) {
@@ -76,52 +77,15 @@ export default {
         throw error
       }
     },
-    async updateAttendance ({ commit }, payload) {
-      const {
-        reason,
-        eventId,
-        studentId
-      } = payload
-
-      await firebase.database().ref('events').child(eventId).update({
-        absenteeList: [{
-          studentId,
-          reason
-        }]
-      })
-      // const event = getters.eventById(eventId)
-      // if (event.absenteeList) {
-      //   console.log(123)
-      // } else {
-      //   event.absenteeList = []
-      //   event.absenteeList.push({
-      //     reason,
-      //     studentId
-      //   })
-      //   console.log(event)
-      // }
-
-      // const absenteeList = event.absenteeList
-      // const student = absenteeList.find(item => item.id === studentId)
-
-      // if (!reason) {
-      //   const index = absenteeList.map(item => item.id).indexOf(studentId)
-
-      //   absenteeList.splice(index, 1)
-      // } else if (reason && student) {
-      //   student.description = reason
-      // } else {
-      //   absenteeList.push({
-      //     id: studentId,
-      //     description: reason
-      //   })
-      // }
-    },
-    async addEvent ({ commit }, payload) {
+    async addEvent ({ commit, dispatch }, payload) {
       commit('loading', true)
 
       try {
         const event = await firebase.database().ref('events').push(payload)
+
+        if (payload.name === 'Занятие') {
+          dispatch('addAbsentEvent', event.key)
+        }
 
         commit('addEvent', {
           ...payload,

@@ -11,6 +11,7 @@ export default {
   created () {
     this.$store.dispatch('fetchStudents')
     this.$store.dispatch('fetchEvents')
+    this.$store.dispatch('fetchAttendance')
   },
 
   computed: {
