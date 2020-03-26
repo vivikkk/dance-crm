@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import common from './modules/common'
 import students from './modules/students'
 import events from './modules/events'
+import attendance from './modules/attendance'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
   modules: {
     students,
     events,
-    common
+    common,
+    attendance
   }
 })

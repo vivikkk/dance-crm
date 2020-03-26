@@ -14,10 +14,10 @@
         @add="addEvent"
         @cancel="addEventDialog = false"
       )
-    // TODO: Loader
+
     v-row
       v-col(cols="12")
-        h1 Таблица посещений групп
+        h1 Таблица посещаемости
 
       v-dialog(
         v-model="isLoading"
@@ -44,7 +44,7 @@
             :tabs="getDatesForTabs"
             :dates="lowGroupLessons"
             :group="lowGroupStudents"
-            @update="update"
+            @updateReason="updateHandler"
           )
 
         v-col(
@@ -55,7 +55,7 @@
             :tabs="getDatesForTabs"
             :dates="midGroupLessons"
             :group="midGroupStudents"
-            @update="update"
+            @updateReason="updateHandler"
           )
 
         v-col(cols="12")
@@ -64,7 +64,7 @@
             :tabs="getDatesForTabs"
             :dates="highGroupLessons"
             :group="highGroupStudents"
-            @update="update"
+            @updateReason="updateHandler"
           )
 
     v-btn(
@@ -172,8 +172,8 @@ export default {
       this.addEventDialog = false
       this.$store.dispatch('addEvent', event)
     },
-    update (obj) {
-      this.$store.commit('updateAttendance', obj)
+    updateHandler (obj) {
+      this.$store.dispatch('updateAttendance', obj)
     }
   }
 }

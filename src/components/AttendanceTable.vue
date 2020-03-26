@@ -64,7 +64,7 @@ div
                 ) Отмена
                 v-btn(
                   text color="green"
-                  @click="update"
+                  @click="updateReason"
                 ) Сохранить
 </template>
 
@@ -125,31 +125,31 @@ export default {
       return nextMonth.toISOString().substring(0, 7)
     },
     getCellContent (studentId, dateId) {
-      const absenteeList = this.$store.getters.eventById(dateId).absenteeList || []
+      // const absenteeList = this.$store.getters.eventById(dateId).absenteeList
 
-      if (absenteeList.find(item => item.id === studentId)) {
-        return absenteeList.find(item => item.id === studentId).description
-      }
+      // if (absenteeList) {
+      //   return absenteeList.find(item => item.id === studentId).description
+      // }
     },
     clickCellHandler (nativeEvent, date, student) {
-      const reason = date.absenteeList.find(item => item.id === student.id)
-
-      this.studentReason = reason ? reason.description : null
       this.selectedNativeElement = nativeEvent.target
       this.selectedStudent = student
       this.selectedDate = date
+      // const reason = date.absenteeList.find(item => item.id === student.id) || null
+
+      // this.studentReason = reason ? reason.description : null
 
       // eslint-disable-next-line no-return-assign
       setTimeout(() => this.selectedOpen = true, 10)
     },
-    update () {
+    updateReason () {
       const obj = {
         eventId: this.selectedDate.id,
         studentId: this.selectedStudent.id,
         reason: this.studentReason
       }
 
-      this.$emit('update', obj)
+      this.$emit('updateReason', obj)
       this.selectedOpen = false
     }
   }

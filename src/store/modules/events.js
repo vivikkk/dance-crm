@@ -22,29 +22,6 @@ export default {
     },
     addEvent (state, payload) {
       state.push(payload)
-    },
-    updateAttendance (state, payload) {
-      const {
-        reason,
-        eventId,
-        studentId
-      } = payload
-      const event = state.find(item => item.id === eventId)
-      const absenteeList = event.absenteeList
-      const student = absenteeList.find(item => item.id === studentId)
-
-      if (!reason) {
-        const index = absenteeList.map(item => item.id).indexOf(studentId)
-
-        absenteeList.splice(index, 1)
-      } else if (reason && student) {
-        student.description = reason
-      } else {
-        absenteeList.push({
-          id: studentId,
-          description: reason
-        })
-      }
     }
   },
 
@@ -98,6 +75,47 @@ export default {
         commit('loading', false)
         throw error
       }
+    },
+    async updateAttendance ({ commit }, payload) {
+      const {
+        reason,
+        eventId,
+        studentId
+      } = payload
+
+      await firebase.database().ref('events').child(eventId).update({
+        absenteeList: [{
+          studentId,
+          reason
+        }]
+      })
+      // const event = getters.eventById(eventId)
+      // if (event.absenteeList) {
+      //   console.log(123)
+      // } else {
+      //   event.absenteeList = []
+      //   event.absenteeList.push({
+      //     reason,
+      //     studentId
+      //   })
+      //   console.log(event)
+      // }
+
+      // const absenteeList = event.absenteeList
+      // const student = absenteeList.find(item => item.id === studentId)
+
+      // if (!reason) {
+      //   const index = absenteeList.map(item => item.id).indexOf(studentId)
+
+      //   absenteeList.splice(index, 1)
+      // } else if (reason && student) {
+      //   student.description = reason
+      // } else {
+      //   absenteeList.push({
+      //     id: studentId,
+      //     description: reason
+      //   })
+      // }
     },
     async addEvent ({ commit }, payload) {
       commit('loading', true)
