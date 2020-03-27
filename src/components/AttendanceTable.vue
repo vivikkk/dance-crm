@@ -125,18 +125,19 @@ export default {
       return nextMonth.toISOString().substring(0, 7)
     },
     getCellContent (studentId, dateId) {
-      // const absenteeList = this.$store.getters.eventById(dateId).absenteeList
+      // const absentEvent = this.$store.getters.absentEvent(dateId)
+      // const absentStudent = absentEvent.attendanceList.find(item => item.studentId === studentId)
 
-      // if (absenteeList) {
-      //   return absenteeList.find(item => item.id === studentId).description
+      // if (absentStudent) {
+      //   return absentStudent.reason
       // }
     },
     clickCellHandler (nativeEvent, date, student) {
       this.selectedNativeElement = nativeEvent.target
       this.selectedStudent = student
       this.selectedDate = date
-      // const reason = date.absenteeList.find(item => item.id === student.id) || null
 
+      // const reason = date.absenteeList.find(item => item.id === student.id) || null
       // this.studentReason = reason ? reason.description : null
 
       // eslint-disable-next-line no-return-assign

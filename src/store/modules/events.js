@@ -84,7 +84,13 @@ export default {
         const event = await firebase.database().ref('events').push(payload)
 
         if (payload.name === 'Занятие') {
-          dispatch('addAbsentEvent', event.key)
+          const obj = {
+            eventId: event.key,
+            group: payload.group,
+            start: payload.start
+          }
+
+          dispatch('addAbsentEvent', obj)
         }
 
         commit('addEvent', {
