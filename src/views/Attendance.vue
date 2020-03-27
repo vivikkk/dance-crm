@@ -163,7 +163,6 @@ export default {
         date.setMonth(date.getMonth() + 1)
       } while (date.toISOString() < this.lastLessonDate)
 
-      datesToTabArr.push(this.lastLessonDate.substring(0, 7))
       return datesToTabArr.filter((element, index) => (index % 2 === 0))
     }
   },

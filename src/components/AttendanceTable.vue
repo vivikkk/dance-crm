@@ -100,6 +100,7 @@ export default {
   },
 
   mounted () {
+    this.selectedDate = this.today
     this.selectedTab = this.tabs.indexOf(this.today)
   },
 
@@ -109,14 +110,14 @@ export default {
     },
     datesRange () {
       return this.dates.filter(date => (
-        date.start.includes(this.today) || date.start.includes(this.getNextMonth(this.today))
+        date.start.includes(this.selectedDate) || date.start.includes(this.getNextMonth(this.selectedDate))
       ))
     }
   },
 
   methods: {
     setDatesRange (date) {
-      this.today = date
+      this.selectedDate = date
     },
     getNextMonth (date) {
       const nextMonth = new Date(date)
@@ -150,6 +151,7 @@ export default {
       const obj = {
         eventId: this.selectedDate.id,
         studentId: this.selectedStudent.id,
+        group: this.selectedStudent.group,
         reason: this.studentReason
       }
 

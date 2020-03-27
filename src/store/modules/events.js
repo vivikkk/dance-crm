@@ -86,7 +86,6 @@ export default {
         if (payload.name === 'Занятие') {
           const obj = {
             eventId: event.key,
-            group: payload.group,
             start: payload.start
           }
 

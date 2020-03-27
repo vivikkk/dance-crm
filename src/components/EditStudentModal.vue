@@ -30,6 +30,8 @@ v-card
                     v-text-field(
                       label="ФИО"
                       v-model="currentStudent.name"
+                      hint="Обязательное поле"
+                      persistent-hint
                     )
                   v-col(cols="12" md="4")
                     v-menu(
@@ -64,6 +66,8 @@ v-card
                       label="Группа"
                       v-model="currentStudent.group"
                       :items="groups"
+                      hint="Обязательное поле"
+                      persistent-hint
                     )
                   v-col(cols="12" md="4")
                     v-select(
@@ -131,6 +135,7 @@ v-card
         @click="$emit('cancel')"
       ) Отмена
       v-btn(
+        :disabled="!valid"
         text color="green"
         @click="update"
       ) Сохранить
@@ -199,6 +204,12 @@ export default {
   watch: {
     menu (val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+    }
+  },
+
+  computed: {
+    valid () {
+      return (this.currentStudent.name && this.currentStudent.group)
     }
   },
 

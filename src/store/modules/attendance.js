@@ -18,6 +18,7 @@ export default {
       const {
         reason,
         studentId,
+        group,
         id
       } = payload
 
@@ -25,6 +26,7 @@ export default {
         event.attendanceList.push({
           reason,
           studentId,
+          group,
           id
         })
       } else if (!id && reason) {
@@ -69,7 +71,6 @@ export default {
             id: key,
             eventId: event.eventId,
             start: event.start,
-            group: event.group,
             attendanceList: arr
           })
         })
@@ -103,7 +104,8 @@ export default {
       const {
         eventId,
         studentId,
-        reason
+        reason,
+        group
       } = payload
       const absentEvent = getters.absentEvent(eventId)
 
@@ -115,6 +117,7 @@ export default {
         if (!currentStudent) {
           const test = ref.child('attendanceList').push({
             studentId,
+            group,
             reason
           })
           id = test.key
