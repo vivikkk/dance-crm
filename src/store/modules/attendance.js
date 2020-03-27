@@ -12,6 +12,14 @@ export default {
       const index = state.map(item => item.eventId).indexOf(payload)
       state.splice(index, 1)
     },
+    updateAbsentEvent (state, payload) {
+      // const event = state.find(item => item.id === payload.id)
+
+      // Object.keys(event).forEach(key => {
+      //   event[key] = payload[key]
+      // })
+      console.log(payload)
+    },
     addAbsentStudent (state, payload) {
       state.push(payload)
     }
@@ -34,7 +42,10 @@ export default {
           if (event.attendanceList) {
             Object.keys(event.attendanceList).forEach(key => {
               arr.push(
-                { ...event.attendanceList[key] }
+                {
+                  ...event.attendanceList[key],
+                  id: key
+                }
               )
             })
           }
@@ -80,12 +91,27 @@ export default {
         reason
       } = payload
       const absentEvent = getters.absentEvent(eventId)
-      const ref = await firebase.database().ref(`/attendance/${absentEvent.id}`)
+      try {
+        const ref = await firebase.database().ref(`/attendance/${absentEvent.id}`)
+        const currentStudent = absentEvent.attendanceList.find(student => student.studentId === studentId)
 
-      ref.child('attendanceList').push({
-        studentId,
-        reason
-      })
+        if (!currentStudent) {
+          ref.child('attendanceList').push({
+            studentId,
+            reason
+          })
+        } else if (currentStudent && !reason) {
+          ref.child('attendanceList').child(currentStudent.id).remove()
+        } else {
+          ref.child('attendanceList').child(currentStudent.id).update({
+            reason
+          })
+        }
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
     },
     async deleteAbsentEvent ({ commit, getters }, payload) {
       try {
