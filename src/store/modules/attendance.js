@@ -10,15 +10,32 @@ export default {
     },
     deleteAbsentEvent (state, payload) {
       const index = state.map(item => item.eventId).indexOf(payload)
+
       state.splice(index, 1)
     },
     updateAbsentEvent (state, payload) {
-      // const event = state.find(item => item.id === payload.id)
+      const event = state.find(item => item.eventId === payload.eventId)
+      const {
+        reason,
+        studentId,
+        id
+      } = payload
 
-      // Object.keys(event).forEach(key => {
-      //   event[key] = payload[key]
-      // })
-      console.log(payload)
+      if (id && reason) {
+        event.attendanceList.push({
+          reason,
+          studentId,
+          id
+        })
+      } else if (!id && reason) {
+        const student = event.attendanceList.find(item => item.studentId === studentId)
+
+        student.reason = reason
+      } else {
+        const index = event.attendanceList.map(item => item.eventId).indexOf(payload)
+
+        event.attendanceList.splice(index, 1)
+      }
     },
     addAbsentStudent (state, payload) {
       state.push(payload)
@@ -28,7 +45,6 @@ export default {
   actions: {
     async fetchAttendance ({ commit }, payload) {
       commit('loading', true)
-
       const resultAbsenteeList = []
 
       try {
@@ -49,7 +65,6 @@ export default {
               )
             })
           }
-
           resultAbsenteeList.push({
             id: key,
             eventId: event.eventId,
@@ -91,15 +106,18 @@ export default {
         reason
       } = payload
       const absentEvent = getters.absentEvent(eventId)
+
       try {
         const ref = await firebase.database().ref(`/attendance/${absentEvent.id}`)
         const currentStudent = absentEvent.attendanceList.find(student => student.studentId === studentId)
+        let id = null
 
         if (!currentStudent) {
-          ref.child('attendanceList').push({
+          const test = ref.child('attendanceList').push({
             studentId,
             reason
           })
+          id = test.key
         } else if (currentStudent && !reason) {
           ref.child('attendanceList').child(currentStudent.id).remove()
         } else {
@@ -107,7 +125,11 @@ export default {
             reason
           })
         }
-        commit('loading', false)
+
+        commit('updateAbsentEvent', {
+          ...payload,
+          id
+        })
       } catch (error) {
         commit('loading', false)
         throw error
@@ -121,6 +143,7 @@ export default {
           await firebase.database().ref(`/attendance/${absentEvent.id}`).remove()
           commit('deleteAbsentEvent', payload)
         }
+        commit('loading', false)
       } catch (error) {
         commit('loading', false)
         throw error

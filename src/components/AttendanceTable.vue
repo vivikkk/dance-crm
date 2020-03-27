@@ -30,7 +30,7 @@ div
             td.text-center.border(
               v-for="date in datesRange"
               :key="date.id"
-              @click="clickCellHandler($event, date, student)"
+              @click="clickCellHandler($event, student, date)"
             ) {{ getCellContent(student.id, date.id) }}
 
           v-menu(
@@ -132,14 +132,17 @@ export default {
         return absentStudent.reason
       }
     },
-    clickCellHandler (nativeEvent, date, student) {
+    clickCellHandler (nativeEvent, student, date) {
+      const absentEvent = this.$store.getters.absentEvent(date.id)
+      const absentStudent = absentEvent.attendanceList.find(item => item.studentId === student.id)
+
       this.selectedNativeElement = nativeEvent.target
       this.selectedStudent = student
       this.selectedDate = date
 
-      // const reason = date.absenteeList.find(item => item.id === student.id) || null
-      // this.studentReason = reason ? reason.description : null
-
+      if (absentStudent) {
+        this.studentReason = absentStudent.reason
+      }
       // eslint-disable-next-line no-return-assign
       setTimeout(() => this.selectedOpen = true, 10)
     },
