@@ -15,25 +15,25 @@
         @cancel="addEventDialog = false"
       )
 
+    v-dialog(
+      v-model="isLoading"
+      persistent
+      width="300"
+    )
+      v-card(
+        color="primary" dark
+      )
+        v-card-title Пожалуйста, подождите
+        v-card-text(class="pt-4")
+          v-progress-linear(
+            indeterminate
+            color="white"
+            class="mb-0"
+          )
+
     v-row
       v-col(cols="12")
         h1 Таблица посещаемости
-
-      v-dialog(
-        v-model="isLoading"
-        persistent
-        width="300"
-      )
-        v-card(
-          color="primary" dark
-        )
-          v-card-title Пожалуйста, подождите
-          v-card-text(class="pt-4")
-            v-progress-linear(
-              indeterminate
-              color="white"
-              class="mb-0"
-            )
 
       template(
         v-if="!isLoading"
@@ -105,9 +105,10 @@ export default {
 
   watch: {
     loading (newValue, oldValue) {
+      this.isLoading = true
       setTimeout(() => {
         this.isLoading = false
-      }, 500)
+      }, 1000)
     }
   },
 

@@ -125,12 +125,12 @@ export default {
       return nextMonth.toISOString().substring(0, 7)
     },
     getCellContent (studentId, dateId) {
-      // const absentEvent = this.$store.getters.absentEvent(dateId)
-      // const absentStudent = absentEvent.attendanceList.find(item => item.studentId === studentId)
+      const absentEvent = this.$store.getters.absentEvent(dateId)
+      const absentStudent = absentEvent.attendanceList.find(item => item.studentId === studentId)
 
-      // if (absentStudent) {
-      //   return absentStudent.reason
-      // }
+      if (absentStudent) {
+        return absentStudent.reason
+      }
     },
     clickCellHandler (nativeEvent, date, student) {
       this.selectedNativeElement = nativeEvent.target

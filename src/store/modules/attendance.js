@@ -8,6 +8,10 @@ export default {
     loadAttendance (state, payload) {
       payload.forEach(item => state.push(item))
     },
+    deleteAbsentEvent (state, payload) {
+      const index = state.map(item => item.eventId).indexOf(payload)
+      state.splice(index, 1)
+    },
     addAbsentStudent (state, payload) {
       state.push(payload)
     }
@@ -54,8 +58,14 @@ export default {
       commit('loading', true)
 
       try {
-        await firebase.database().ref('attendance').push({
+        const event = await firebase.database().ref('attendance').push({
           ...payload
+        })
+
+        commit('addAbsentStudent', {
+          ...payload,
+          id: event.key,
+          attendanceList: []
         })
         commit('loading', false)
       } catch (error) {
@@ -83,6 +93,7 @@ export default {
           const absentEvent = getters.absentEvent(payload)
 
           await firebase.database().ref(`/attendance/${absentEvent.id}`).remove()
+          commit('deleteAbsentEvent', payload)
         }
       } catch (error) {
         commit('loading', false)
