@@ -108,8 +108,8 @@ export default {
 }
 </script>
 
-<style>
-span {
+<style scoped>
+span, strong {
   white-space: nowrap;
 }
 </style>

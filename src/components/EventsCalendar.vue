@@ -111,7 +111,7 @@ v-row(
               min-width="290px"
             )
               template(
-                v-slot:activator="{ on }"
+                #activator="{ on }"
               )
                 v-text-field(
                   v-model="selectedEvent.start"
@@ -148,7 +148,7 @@ v-row(
               min-width="290px"
             )
               template(
-                v-slot:activator="{ on }"
+                #activator="{ on }"
               )
                 v-text-field(
                   v-model="selectedEvent.end"

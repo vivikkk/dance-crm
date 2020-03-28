@@ -25,62 +25,63 @@ v-card
               ) Контакты
             v-stepper-items
               v-stepper-content(:step="1")
-                v-row
-                  v-col(cols="12" md="8")
-                    v-text-field(
-                      label="ФИО"
-                      v-model="currentStudent.name"
-                      hint="Обязательное поле"
-                      persistent-hint
-                    )
-                  v-col(cols="12" md="4")
-                    v-menu(
-                      ref="menu"
-                      v-model="menu"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="290px"
-                    )
-                      template(#activator="{ on }")
-                        v-text-field(
-                          v-model="currentStudent.dateOfBirthday"
-                          label="Дата рождения"
-                          prepend-icon="mdi-gift-outline"
-                          hint="YYYY/MM/DD/"
-                          persistent-hint
-                          readonly
-                          v-on="on"
-                        )
-                      v-date-picker(
-                        ref="picker"
-                        v-model="currentStudent.dateOfBirthday"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1990-01-01"
-                        @change="save"
+                v-form(
+                  v-model="valid"
+                  ref="form"
+                  lazy-validation
+                )
+                  v-row
+                    v-col(cols="12" md="8")
+                      v-text-field(
+                        label="ФИО"
+                        v-model="currentStudent.name"
+                        :rules="[() => !!currentStudent.name || 'Обязательное поле']"
                       )
+                    v-col(cols="12" md="4")
+                      v-menu(
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                      )
+                        template(#activator="{ on }")
+                          v-text-field(
+                            v-model="currentStudent.dateOfBirthday"
+                            label="Дата рождения"
+                            prepend-icon="mdi-gift-outline"
+                            readonly
+                            v-on="on"
+                          )
+                        v-date-picker(
+                          ref="picker"
+                          v-model="currentStudent.dateOfBirthday"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1990-01-01"
+                          @change="save"
+                        )
 
-                  v-col(cols="12" md="4")
-                    v-select(
-                      label="Группа"
-                      v-model="currentStudent.group"
-                      :items="groups"
-                      hint="Обязательное поле"
-                      persistent-hint
-                    )
-                  v-col(cols="12" md="4")
-                    v-select(
-                      label="Школа"
-                      v-model="currentStudent.school"
-                      :items="schools"
-                    )
-                  v-col(cols="12" md="4")
-                    v-select(
-                      label="Класс"
-                      v-model="currentStudent.classStudy"
-                      :items="classes"
-                    )
+                    v-col(cols="12" md="4")
+                      v-select(
+                        label="Группа"
+                        v-model="currentStudent.group"
+                        :items="groups"
+                        :rules="[() => !!currentStudent.group || 'Обязательное поле']"
+                      )
+                    v-col(cols="12" md="4")
+                      v-select(
+                        label="Школа"
+                        v-model="currentStudent.school"
+                        :items="schools"
+                      )
+                    v-col(cols="12" md="4")
+                      v-select(
+                        label="Класс"
+                        v-model="currentStudent.classStudy"
+                        :items="classes"
+                      )
 
               v-stepper-content(:step="2")
                 v-row
@@ -137,7 +138,7 @@ v-card
       v-btn(
         :disabled="!valid"
         text color="green"
-        @click="update"
+        @click="onSubmit"
       ) Сохранить
 </template>
 
@@ -161,6 +162,7 @@ export default {
       schools: schools,
       menu: false,
       isEditModal: true,
+      valid: false,
       currentStudent: {
         id: '',
         name: '',
@@ -207,21 +209,17 @@ export default {
     }
   },
 
-  computed: {
-    valid () {
-      return (this.currentStudent.name && this.currentStudent.group)
-    }
-  },
-
   methods: {
     save (date) {
       this.$refs.menu.save(date)
     },
-    update () {
-      if (this.isEditModal) {
-        this.$emit('update', this.currentStudent)
-      } else {
-        this.$emit('add', this.currentStudent)
+    onSubmit () {
+      if (this.$refs.form.validate()) {
+        if (this.isEditModal) {
+          this.$emit('update', this.currentStudent)
+        } else {
+          this.$emit('add', this.currentStudent)
+        }
       }
     }
   }

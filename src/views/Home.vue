@@ -7,14 +7,14 @@ v-container
         :items-per-page.sync="itemsPerPage"
         hide-default-footer
       )
-        template(v-slot:header)
+        template(#header)
           v-toolbar(
             class="mb-2" dark
             color="primary"
           )
             v-toolbar-title Посещаемость
         template(
-          v-slot:default="props"
+          #default="props"
         )
           v-row
             v-col(

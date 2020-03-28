@@ -9,58 +9,62 @@ v-card
   v-card-text(
     class="mt-4"
   )
-    v-select(
-      label="Тип события"
-      v-model="event.name"
-      :disabled="isSimpleLesson"
-      :items="typesEvents"
+    v-form(
+      v-model="valid"
+      ref="form"
+      lazy-validation
     )
-    v-select(
-      label="Группа"
-      v-model="event.group"
-      multiple
-      :items="groups"
-    )
-    v-text-field(
-      label="Дополнительно"
-      v-model="event.description"
-    )
-    v-menu(
-      ref="startTimeMenu"
-      v-model="startTimeMenu"
-      :close-on-content-click="false"
-      :return-value.sync="event.start"
-      transition="scale-transition"
-      offset-y
-      min-width="290px"
-    )
-      template(
-        v-slot:activator="{ on }"
+      v-select(
+        label="Тип события"
+        v-model="event.name"
+        :disabled="isSimpleLesson"
+        :rules="[() => !!event.name || 'Обязательное поле']"
+        :items="typesEvents"
       )
-        v-text-field(
-          v-model="event.start"
-          label="Начало события"
-          prepend-icon="mdi-calendar"
-          readonly
-          v-on="on"
-          hint="YYYY/MM/DD/"
-          persistent-hint
-          clearable
-          @click:clear="event.start = null"
+      v-select(
+        label="Группа"
+        v-model="event.group"
+        multiple
+        :items="groups"
+        :rules="[() => !!event.group.length || 'Обязательное поле']"
+      )
+      v-text-field(
+        label="Дополнительно"
+        v-model="event.description"
+      )
+      v-menu(
+        ref="startTimeMenu"
+        v-model="startTimeMenu"
+        :close-on-content-click="false"
+        :return-value.sync="event.start"
+        transition="scale-transition"
+        offset-y
+        min-width="290px"
+      )
+        template(
+          #activator="{ on }"
         )
-      v-date-picker(
-        no-title scrollable
-        v-model="event.start"
-      )
-        v-spacer
-        v-btn(
-          text color="primary"
-          @click="startTimeMenu = false"
-        ) Отмена
-        v-btn(
-          text color="primary"
-          @click="$refs.startTimeMenu.save(event.start)"
-        ) Ок
+          v-text-field(
+            v-model="event.start"
+            label="Начало события"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-on="on"
+            :rules="[() => !!event.start || 'Обязательное поле']"
+          )
+        v-date-picker(
+          no-title scrollable
+          v-model="event.start"
+        )
+          v-spacer
+          v-btn(
+            text color="primary"
+            @click="startTimeMenu = false"
+          ) Отмена
+          v-btn(
+            text color="primary"
+            @click="$refs.startTimeMenu.save(event.start)"
+          ) Ок
 
     v-menu(
       v-if="!isSimpleLesson"
@@ -73,7 +77,7 @@ v-card
       min-width="290px"
     )
       template(
-        v-slot:activator="{ on }"
+        #activator="{ on }"
       )
         v-text-field(
           v-model="event.end"
@@ -81,8 +85,6 @@ v-card
           prepend-icon="mdi-calendar"
           readonly
           v-on="on"
-          hint="YYYY/MM/DD/"
-          persistent-hint
           clearable
           @click:clear="event.end = null"
         )
@@ -109,7 +111,7 @@ v-card
     v-btn(
       :disabled="!valid"
       text color="green"
-      @click="$emit('add', event)"
+      @click="onSubmit"
     ) Добавить
 </template>
 
@@ -140,6 +142,7 @@ export default {
     return {
       startTimeMenu: false,
       endTimeMenu: false,
+      valid: false,
       event: {
         id: '',
         name: '',
@@ -158,13 +161,18 @@ export default {
   },
 
   computed: {
-    valid () {
-      return (this.event.start && this.event.name)
-    },
     getEventColor () {
       const eventIndex = this.typesEvents.indexOf(this.event.name)
 
       return this.colors[eventIndex]
+    }
+  },
+
+  methods: {
+    onSubmit () {
+      if (this.$refs.form.validate()) {
+        this.$emit('add', this.event)
+      }
     }
   }
 }

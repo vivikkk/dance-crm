@@ -14,7 +14,7 @@ div
 
   v-card
     v-simple-table
-      template(v-slot:default)
+      template(#default)
         thead
           tr
             th.text-left ФИО
