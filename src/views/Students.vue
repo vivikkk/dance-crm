@@ -4,7 +4,6 @@ v-container
     v-model="dialog"
     :max-width="`${this.isEditModal ? '800px' : '400px'}`"
   )
-    // TODO: declination
     component(
       v-if="dialog"
       :is="modalLayout"
@@ -22,7 +21,6 @@ v-container
         v-model="showAllColumns"
         label="Показать все колонки"
       )
-
   v-row(
     align="center"
     justify="center"

@@ -85,107 +85,108 @@ v-row(
             )
               v-icon mdi-trash-can-outline
           v-card-text
-            v-select(
-              label="Тип занятия"
-              v-model="selectedEvent.name"
-              :items="typesEvents"
+            v-form(
+              v-model="valid"
+              ref="form"
+              lazy-validation
             )
-            v-select(
-              label="Группа"
-              v-model="selectedEvent.group"
-              multiple
-              :items="groups"
-            )
-            v-text-field(
-              label="Дополнительно"
-              v-model="selectedEvent.description"
-            )
-
-            v-menu(
-              ref="startTimeMenu"
-              v-model="startTimeMenu"
-              :close-on-content-click="false"
-              :return-value.sync="selectedEvent.start"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            )
-              template(
-                #activator="{ on }"
+              v-select(
+                label="Тип занятия"
+                v-model="selectedEvent.name"
+                :items="typesEvents"
               )
-                v-text-field(
+              v-select(
+                label="Группа"
+                v-model="selectedEvent.group"
+                multiple
+                :items="groups"
+                :rules="[() => !!selectedEvent.group.length || 'Обязательное поле']"
+              )
+              v-text-field(
+                label="Дополнительно"
+                v-model="selectedEvent.description"
+              )
+
+              v-menu(
+                ref="startTimeMenu"
+                v-model="startTimeMenu"
+                :close-on-content-click="false"
+                :return-value.sync="selectedEvent.start"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              )
+                template(
+                  #activator="{ on }"
+                )
+                  v-text-field(
+                    v-model="selectedEvent.start"
+                    label="Начало события"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-on="on"
+                    :rules="[() => !!selectedEvent.start || 'Обязательное поле']"
+                  )
+                v-date-picker(
+                  no-title scrollable
                   v-model="selectedEvent.start"
-                  label="Начало события"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  v-on="on"
-                  hint="YYYY/MM/DD/"
-                  persistent-hint
-                  clearable
-                  @click:clear="selectedEvent.start = null"
                 )
-              v-date-picker(
-                no-title scrollable
-                v-model="selectedEvent.start"
-              )
-                v-spacer
-                v-btn(
-                  text color="primary"
-                  @click="startTimeMenu = false"
-                ) Отмена
-                v-btn(
-                  text color="primary"
-                  @click="$refs.startTimeMenu.save(selectedEvent.start)"
-                ) Ок
+                  v-spacer
+                  v-btn(
+                    text color="primary"
+                    @click="startTimeMenu = false"
+                  ) Отмена
+                  v-btn(
+                    text color="primary"
+                    @click="$refs.startTimeMenu.save(selectedEvent.start)"
+                  ) Ок
 
-            v-menu(
-              ref="endTimeMenu"
-              v-model="endTimeMenu"
-              :close-on-content-click="false"
-              :return-value.sync="selectedEvent.end"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            )
-              template(
-                #activator="{ on }"
+              v-menu(
+                ref="endTimeMenu"
+                v-model="endTimeMenu"
+                :close-on-content-click="false"
+                :return-value.sync="selectedEvent.end"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
               )
-                v-text-field(
+                template(
+                  #activator="{ on }"
+                )
+                  v-text-field(
+                    v-model="selectedEvent.end"
+                    label="Конец события"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-on="on"
+                    clearable
+                    @click:clear="selectedEvent.end = null"
+                  )
+                v-date-picker(
+                  no-title scrollable
                   v-model="selectedEvent.end"
-                  label="Конец события"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  v-on="on"
-                  hint="YYYY/MM/DD/"
-                  persistent-hint
-                  clearable
-                  @click:clear="selectedEvent.end = null"
                 )
-              v-date-picker(
-                no-title scrollable
-                v-model="selectedEvent.end"
-              )
+                  v-spacer
+                  v-btn(
+                    text color="primary"
+                    @click="endTimeMenu = false"
+                  ) Отмена
+                  v-btn(
+                    text color="primary"
+                    @click="$refs.endTimeMenu.save(selectedEvent.end)"
+                  ) Ок
+
+              v-card-actions
                 v-spacer
                 v-btn(
-                  text color="primary"
-                  @click="endTimeMenu = false"
+                  text color="secondary"
+                  @click="selectedOpen = false"
                 ) Отмена
                 v-btn(
-                  text color="primary"
-                  @click="$refs.endTimeMenu.save(selectedEvent.end)"
-                ) Ок
-
-            v-card-actions
-              v-spacer
-              v-btn(
-                text color="secondary"
-                @click="selectedOpen = false"
-              ) Отмена
-              v-btn(
-                text color="green"
-                :disabled="!valid"
-                @click="update"
-              ) Сохранить
+                  text color="green"
+                  :disabled="!valid"
+                  @click="update"
+                ) Сохранить
 </template>
 
 <script>
@@ -215,6 +216,7 @@ export default {
     return {
       focus: '',
       type: 'month',
+      valid: false,
       typeToLabel: {
         month: 'Месяц',
         week: 'Неделя',
@@ -238,9 +240,6 @@ export default {
   computed: {
     loading () {
       return this.$store.getters.loading
-    },
-    valid () {
-      return this.selectedEvent.start && this.selectedEvent.name
     },
     title () {
       const { start, end } = this

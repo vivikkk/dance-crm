@@ -13,6 +13,7 @@
     v-data-table(
       :headers="headers"
       :items="students"
+      :search="search"
       align="start"
     )
       template(#item.name="{ value }")
