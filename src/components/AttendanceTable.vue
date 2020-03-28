@@ -23,13 +23,14 @@ div
             ) {{ date.start | dateParse('YYYY-MM-DD') | dateFormat('MMMM D') }}
         tbody
           tr(
-            v-for="student in group"
+            v-for="student in students"
             :key="student.id"
           )
             td.text-left {{ student.name }}
-            td.text-center.border(
+            td.text-center.border.cursor(
               v-for="date in datesRange"
               :key="date.id"
+              :class="{'fill-cell': checkStudentAttendance(student.id, date.id)}"
               @click="clickCellHandler($event, student, date)"
             ) {{ getCellContent(student.id, date.id) }}
 
@@ -109,6 +110,20 @@ export default {
     loading () {
       return this.$store.getters.loading
     },
+    students () {
+      const group = this.group
+
+      group.sort((a, b) => {
+        if (a.name > b.name) {
+          return 1
+        }
+        if (a.name < b.name) {
+          return -1
+        }
+        return 0
+      })
+      return group
+    },
     datesRange () {
       return this.dates.filter(date => (
         date.start.includes(this.selectedTabDate) || date.start.includes(this.getNextMonth(this.selectedTabDate))
@@ -118,7 +133,7 @@ export default {
 
   methods: {
     setDatesRange (date) {
-      this.selectedDate = date
+      this.selectedTabDate = date
     },
     getNextMonth (date) {
       const nextMonth = new Date(date)
@@ -134,6 +149,12 @@ export default {
         return absentStudent.reason
       }
     },
+    checkStudentAttendance (studentId, dateId) {
+      const absentEvent = this.$store.getters.absentEvent(dateId)
+      const absentStudent = absentEvent.attendanceList.find(item => item.studentId === studentId)
+
+      return !!absentStudent
+    },
     clickCellHandler (nativeEvent, student, date) {
       const absentEvent = this.$store.getters.absentEvent(date.id)
       const absentStudent = absentEvent.attendanceList.find(item => item.studentId === student.id)
@@ -145,7 +166,7 @@ export default {
       if (absentStudent) {
         this.studentReason = absentStudent.reason
       } else {
-        this.studentReason = ''
+        this.studentReason = null
       }
       // eslint-disable-next-line no-return-assign
       setTimeout(() => this.selectedOpen = true, 10)
@@ -168,5 +189,8 @@ export default {
 <style scoped>
 .border {
   border-left: 1px solid #e0e0e0;
+}
+.fill-cell {
+  background-color: #ffebee;
 }
 </style>

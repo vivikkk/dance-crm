@@ -110,7 +110,7 @@ export default {
     },
     lessonsEvents (state) {
       return state.filter(item => item.name === 'Занятие')
-        .sort(function (a, b) {
+        .sort((a, b) => {
           if (a.start > b.start) {
             return 1
           }
