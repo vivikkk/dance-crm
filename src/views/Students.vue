@@ -12,7 +12,7 @@ v-container
       @cancel="dialog = false"
       @delete="deleteStudent"
       @update="updateStudent"
-      @add="addStudent"
+      @add="createStudent"
     )
 
   v-row
@@ -38,7 +38,7 @@ v-container
       )
 
   v-btn(
-    class="btn" color="green" fab large bottom absolute right
+    class="btn" color="green" fab large bottom fixed right
     @click="newStudentHandler"
   )
     v-icon(color="white") mdi-account-plus
@@ -162,9 +162,9 @@ export default {
       this.dialog = false
       this.$store.dispatch('updateStudent', student)
     },
-    addStudent (student) {
+    createStudent (student) {
       this.dialog = false
-      this.$store.dispatch('addStudent', student)
+      this.$store.dispatch('createStudent', student)
     }
   }
 }

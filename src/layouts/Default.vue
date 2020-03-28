@@ -22,7 +22,7 @@ v-app
         @click="drawer = !drawer"
       )
       v-toolbar-title
-        router-link(to="/" tag="span") DanceCrm
+        router-link(to="/" tag="span" class="cursor") DanceCrm
 
       v-spacer
 
@@ -57,3 +57,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.cursor{
+  cursor: pointer;
+}
+</style>

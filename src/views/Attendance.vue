@@ -11,7 +11,7 @@
         :typesEvents="typesEvents"
         :colors="colors"
         isSimpleLesson
-        @add="addEvent"
+        @add="createEvent"
         @cancel="addEventDialog = false"
       )
 
@@ -69,7 +69,7 @@
 
     v-btn(
       class="btn" color="blue" fab large
-      bottom absolute right
+      bottom fixed right
       @click="addEventDialog = true"
     )
       v-icon(color="white") mdi-calendar-plus
@@ -168,9 +168,9 @@ export default {
   },
 
   methods: {
-    addEvent (event) {
+    createEvent (event) {
       this.addEventDialog = false
-      this.$store.dispatch('addEvent', event)
+      this.$store.dispatch('createEvent', event)
     },
     updateHandler (obj) {
       this.$store.dispatch('updateAbsentEvent', obj)

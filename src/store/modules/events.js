@@ -5,13 +5,8 @@ export default {
   state: [],
 
   mutations: {
-    loadEvents (state, payload) {
-      payload.forEach(item => state.push(item))
-    },
-    deleteEvent (state, payload) {
-      const index = state.map(item => item.id).indexOf(payload)
-
-      state.splice(index, 1)
+    createEvent (state, payload) {
+      state.push(payload)
     },
     updateEvent (state, payload) {
       const event = state.find(item => item.id === payload.id)
@@ -20,12 +15,57 @@ export default {
         event[key] = payload[key]
       })
     },
-    addEvent (state, payload) {
-      state.push(payload)
+    loadEvents (state, payload) {
+      payload.forEach(item => state.push(item))
+    },
+    deleteEvent (state, payload) {
+      const index = state.map(item => item.id).indexOf(payload)
+
+      state.splice(index, 1)
     }
   },
 
   actions: {
+    async createEvent ({ commit, dispatch }, payload) {
+      commit('loading', true)
+
+      try {
+        const event = await firebase.database().ref('events').push(payload)
+
+        if (payload.name === 'Занятие') {
+          const obj = {
+            eventId: event.key,
+            start: payload.start
+          }
+
+          dispatch('addAbsentEvent', obj)
+        }
+
+        commit('createEvent', {
+          ...payload,
+          id: event.key
+        })
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    },
+    async updateEvent ({ commit }, payload) {
+      commit('loading', true)
+
+      try {
+        await firebase.database().ref('events').child(payload.id).update({
+          ...payload
+        })
+
+        commit('updateEvent', payload)
+        commit('loading', false)
+      } catch (error) {
+        commit('loading', false)
+        throw error
+      }
+    },
     async fetchEvents ({ commit }, payload) {
       const resultEvents = []
 
@@ -56,46 +96,6 @@ export default {
         await firebase.database().ref(`/events/${payload}`).remove()
         dispatch('deleteAbsentEvent', payload)
         commit('deleteEvent', payload)
-        commit('loading', false)
-      } catch (error) {
-        commit('loading', false)
-        throw error
-      }
-    },
-    async updateEvent ({ commit }, payload) {
-      commit('loading', true)
-
-      try {
-        await firebase.database().ref('events').child(payload.id).update({
-          ...payload
-        })
-
-        commit('updateEvent', payload)
-        commit('loading', false)
-      } catch (error) {
-        commit('loading', false)
-        throw error
-      }
-    },
-    async addEvent ({ commit, dispatch }, payload) {
-      commit('loading', true)
-
-      try {
-        const event = await firebase.database().ref('events').push(payload)
-
-        if (payload.name === 'Занятие') {
-          const obj = {
-            eventId: event.key,
-            start: payload.start
-          }
-
-          dispatch('addAbsentEvent', obj)
-        }
-
-        commit('addEvent', {
-          ...payload,
-          id: event.key
-        })
         commit('loading', false)
       } catch (error) {
         commit('loading', false)

@@ -28,7 +28,7 @@ v-container
       :groups="groups"
       :typesEvents="typesEvents"
       :colors="colors"
-      @add="addEvent"
+      @add="createEvent"
       @cancel="showAddEventDialog = false"
     )
 
@@ -43,7 +43,7 @@ v-container
 
   v-btn(
     class="btn" color="green" fab large
-    bottom absolute right
+    bottom fixed right
     @click="showAddEventDialog = true"
   )
     v-icon(color="white") mdi-calendar-plus
@@ -92,9 +92,9 @@ export default {
     updateEvent (event) {
       this.$store.dispatch('updateEvent', event)
     },
-    addEvent (event) {
+    createEvent (event) {
       this.showAddEventDialog = false
-      this.$store.dispatch('addEvent', event)
+      this.$store.dispatch('createEvent', event)
     }
   }
 }
