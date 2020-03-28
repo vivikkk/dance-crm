@@ -95,12 +95,13 @@ export default {
       selectedStudent: null,
       studentReason: null,
       selectedTab: 1,
+      selectedTabDate: null,
       today: new Date().toISOString().substr(0, 7)
     }
   },
 
   mounted () {
-    this.selectedDate = this.today
+    this.selectedTabDate = this.today
     this.selectedTab = this.tabs.indexOf(this.today)
   },
 
@@ -110,7 +111,7 @@ export default {
     },
     datesRange () {
       return this.dates.filter(date => (
-        date.start.includes(this.selectedDate) || date.start.includes(this.getNextMonth(this.selectedDate))
+        date.start.includes(this.selectedTabDate) || date.start.includes(this.getNextMonth(this.selectedTabDate))
       ))
     }
   },
@@ -143,6 +144,8 @@ export default {
 
       if (absentStudent) {
         this.studentReason = absentStudent.reason
+      } else {
+        this.studentReason = ''
       }
       // eslint-disable-next-line no-return-assign
       setTimeout(() => this.selectedOpen = true, 10)
