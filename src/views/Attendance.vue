@@ -114,9 +114,10 @@ export default {
 
   computed: {
     loading () {
-      return this.$store.getters.loading
+      return this.loading
     },
     ...mapGetters([
+      'loading',
       'students',
       'events',
       'lessonsEvents',

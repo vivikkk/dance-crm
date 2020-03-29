@@ -41,6 +41,17 @@ export default {
     },
     addAbsentStudent (state, payload) {
       state.push(payload)
+    },
+    sortAttendanceEvents (state) {
+      state.sort((a, b) => {
+        if (a.start > b.start) {
+          return -1
+        }
+        if (a.start < b.start) {
+          return 1
+        }
+        return 0
+      })
     }
   },
 

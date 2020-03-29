@@ -1,26 +1,19 @@
 <template lang="pug">
   v-container(
-    class="fill-height"
-    fluid
+    class="fill-height" fluid
   )
     v-row(
       align="center"
       justify="center"
     )
       v-col(
-        cols="12"
-        sm="8"
-        md="6"
-        lg="4"
+        cols="12" sm="8" md="6" lg="4"
       )
         v-card
           v-toolbar(
-            dark
-            flat
-            color="primary"
+            dark flat color="primary"
           )
             v-toolbar-title Форма входа
-
           v-card-text
             v-form
               v-text-field(
