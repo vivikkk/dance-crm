@@ -1,9 +1,5 @@
 <template lang="pug">
-v-row(
-  class="fill-height"
-)
-  v-col
-    h1 Календарь событий
+  div
     v-sheet(height="64")
       v-toolbar(
         flat color="white"

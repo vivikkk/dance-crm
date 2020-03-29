@@ -14,8 +14,14 @@ v-container
       @add="createStudent"
     )
 
-  v-row
-    v-col
+  v-row(
+    align="center"
+    justify="center"
+  )
+    v-col(
+      cols="12"
+      lg="8"
+    )
       h1 Ученики и их родители
       v-switch(
         v-model="showAllColumns"
@@ -27,6 +33,7 @@ v-container
   )
     v-col(
       cols="12"
+      lg="8"
     )
       StudentsTable(
         :headers="computedHeaders"

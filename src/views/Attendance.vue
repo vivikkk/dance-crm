@@ -31,41 +31,40 @@
             class="mb-0"
           )
 
-    v-row
+    v-row(
+      v-if="!isLoading"
+    )
       v-col(cols="12")
         h1 Таблица посещаемости
 
-      template(
-        v-if="!isLoading"
-      )
-        v-col(cols="12")
-          h2.mb-2 Младшая
-          AttendanceTable(
-            :tabs="getDatesForTabs"
-            :dates="lowGroupLessons"
-            :group="lowGroupStudents"
-            @updateReason="updateHandler"
-          )
-
-        v-col(
-          cols="12"
+      v-col(cols="12")
+        h2.mb-2 Младшая
+        AttendanceTable(
+          :tabs="getDatesForTabs"
+          :dates="lowGroupLessons"
+          :group="lowGroupStudents"
+          @updateReason="updateHandler"
         )
-          h2.mb-2 Средняя
-          AttendanceTable(
-            :tabs="getDatesForTabs"
-            :dates="midGroupLessons"
-            :group="midGroupStudents"
-            @updateReason="updateHandler"
-          )
 
-        v-col(cols="12")
-          h2.mb-2 Старшая
-          AttendanceTable(
-            :tabs="getDatesForTabs"
-            :dates="highGroupLessons"
-            :group="highGroupStudents"
-            @updateReason="updateHandler"
-          )
+      v-col(
+        cols="12"
+      )
+        h2.mb-2 Средняя
+        AttendanceTable(
+          :tabs="getDatesForTabs"
+          :dates="midGroupLessons"
+          :group="midGroupStudents"
+          @updateReason="updateHandler"
+        )
+
+      v-col(cols="12")
+        h2.mb-2 Старшая
+        AttendanceTable(
+          :tabs="getDatesForTabs"
+          :dates="highGroupLessons"
+          :group="highGroupStudents"
+          @updateReason="updateHandler"
+        )
 
     v-btn(
       class="btn" color="blue" fab large
@@ -108,7 +107,7 @@ export default {
       this.isLoading = true
       setTimeout(() => {
         this.isLoading = false
-      }, 1000)
+      }, 500)
     }
   },
 

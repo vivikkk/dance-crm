@@ -32,14 +32,24 @@ v-container
       @cancel="showAddEventDialog = false"
     )
 
-  EventsCalendar(
-    :events="events"
-    :groups="groups"
-    :typesEvents="typesEvents"
-    :colors="colors"
-    @update="updateEvent"
-    @delete="deleteModalHandler"
+  v-row(
+    class="fill-height"
+    align="center"
+    justify="center"
   )
+    v-col(
+      cols="12"
+      lg="8"
+    )
+      h1 Календарь событий
+      EventsCalendar(
+        :events="events"
+        :groups="groups"
+        :typesEvents="typesEvents"
+        :colors="colors"
+        @update="updateEvent"
+        @delete="deleteModalHandler"
+      )
 
   v-btn(
     class="btn" color="green" fab large
