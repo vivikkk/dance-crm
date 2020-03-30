@@ -27,7 +27,10 @@ export default {
 
   actions: {
     async createStudent ({ commit }, payload) {
+      const addedStudentText = 'Студент добавлен'
+
       commit('loading', true)
+      commit('setSnackbarText', addedStudentText)
 
       try {
         const student = await firebase.database().ref('students').push(payload)
@@ -37,14 +40,17 @@ export default {
           id: student.key
         })
         commit('loading', false)
+        commit('clearSnackbarText')
       } catch (error) {
         commit('loading', false)
         throw error
       }
     },
     async updateStudent ({ commit }, payload) {
-      commit('loading', true)
+      const updateStudentText = 'Данные студента обновлены'
 
+      commit('loading', true)
+      commit('setSnackbarText', updateStudentText)
       try {
         await firebase.database().ref('students').child(payload.id).update({
           ...payload
@@ -52,6 +58,7 @@ export default {
 
         commit('updateStudent', payload)
         commit('loading', false)
+        commit('clearSnackbarText')
       } catch (error) {
         commit('loading', false)
         throw error
@@ -82,13 +89,16 @@ export default {
       }
     },
     async deleteStudent ({ commit }, payload) {
-      commit('loading', true)
+      const removedStudentText = 'Студент удален'
 
+      commit('loading', true)
+      commit('setSnackbarText', removedStudentText)
       try {
         await firebase.database().ref(`/students/${payload}`).remove()
 
         commit('deleteStudent', payload)
         commit('loading', false)
+        commit('clearSnackbarText')
       } catch (error) {
         commit('loading', false)
         throw error

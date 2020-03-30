@@ -1,11 +1,18 @@
 export default {
   state: {
-    loading: false
+    loading: false,
+    snackbarText: null
   },
 
   mutations: {
     loading (state, payload) {
       state.loading = payload
+    },
+    setSnackbarText (state, payload) {
+      state.snackbarText = payload
+    },
+    clearSnackbarText (state) {
+      state.snackbarText = null
     }
   },
 
@@ -18,6 +25,9 @@ export default {
   getters: {
     loading (state) {
       return state.loading
+    },
+    snackbarText (state) {
+      return state.snackbarText
     }
   }
 }

@@ -25,7 +25,7 @@ v-container
       )
 
     v-col(cols="6")
-      h2.mb-4.display-1 Именниники это месяца
+      h2.mb-4.display-1 Именинники это месяца
       BirthdayWidget(
         :birthdays="birthdays"
       )
