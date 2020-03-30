@@ -35,10 +35,10 @@
       v-if="!isLoading"
     )
       v-col(cols="12")
-        h1 Таблица посещаемости
+        h1.mb-2.display-2 Таблица посещаемости
 
       v-col(cols="12")
-        h2.mb-2 Младшая
+        h2.mb-4.display-1 Младшая
         AttendanceTable(
           :tabs="getDatesForTabs"
           :dates="lowGroupLessons"
@@ -49,7 +49,7 @@
       v-col(
         cols="12"
       )
-        h2.mb-2 Средняя
+        h2.mb-4.display-1 Средняя
         AttendanceTable(
           :tabs="getDatesForTabs"
           :dates="midGroupLessons"
@@ -58,7 +58,7 @@
         )
 
       v-col(cols="12")
-        h2.mb-2 Старшая
+        h2.mb-4.display-1 Старшая
         AttendanceTable(
           :tabs="getDatesForTabs"
           :dates="highGroupLessons"

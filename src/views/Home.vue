@@ -18,27 +18,35 @@ v-container
 
   v-row(v-if="!isLoading")
     v-col(cols="12")
-      h2 Посещаемость
+      h2.display-1 Посещаемость
       AttendanceWidget(
         :attendance="attendance"
         :students="students"
       )
-    h2 Именниники это месяца
+
+    v-col(cols="6")
+      h2.mb-4.display-1 Именниники это месяца
+      BirthdayWidget(
+        :birthdays="birthdays"
+      )
 </template>
 
 <script>
 import AttendanceWidget from '@/components/widgets/AttendanceWidget'
+import BirthdayWidget from '@/components/widgets/BirthdayWidget'
 
 export default {
   name: 'Home',
 
   components: {
-    AttendanceWidget
+    AttendanceWidget,
+    BirthdayWidget
   },
 
   data () {
     return {
-      isLoading: true
+      isLoading: true,
+      currentMonth: new Date().toISOString().substring(5, 7)
     }
   },
 
@@ -65,6 +73,17 @@ export default {
     },
     students () {
       return this.$store.getters.students
+    },
+    birthdays () {
+      return this.students.filter(item => item.dateOfBirthday.split('-')[1] === this.currentMonth).sort((a, b) => {
+        if (a.dateOfBirthday.split('-')[2] > b.dateOfBirthday.split('-')[2]) {
+          return 1
+        }
+        if (a.dateOfBirthday.split('-')[2] < b.dateOfBirthday.split('-')[2]) {
+          return -1
+        }
+        return 0
+      })
     }
   }
 }

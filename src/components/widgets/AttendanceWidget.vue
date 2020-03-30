@@ -1,51 +1,50 @@
 <template lang="pug">
-  v-data-iterator(
-    :items="lessons"
-    :items-per-page.sync="itemsPerPage"
-    :page="page"
-    hide-default-footer
-  )
-    template(#default="props")
-      v-row
-        v-col(
-          v-for="item in props.items"
-          :key="item.eventId"
-          v-if="item.attendanceList.length"
-          cols="12"
-          lg="3"
-        )
-          v-card
-            v-card-title
-              span {{ item.start | dateParse('YYYY-MM-DD') | dateFormat('dddd, MMMM DD') }}
-            v-divider
-            v-list
-              v-list-item(dense)
-                v-list-item-content Отсутствовали:
-                  v-list-item-subtitle(
-                    v-for="student in item.attendanceList"
-                    ) {{ getStundenName(student.studentId) }} ({{ student.group | shortGroupName }}) — {{ student.reason | lowerCase }}
-
-    template(#footer)
-      v-divider
-      v-row(
-        class="mt-2" align="center" justify="end"
+v-data-iterator(
+  :items="lessons"
+  :items-per-page.sync="itemsPerPage"
+  :page="page"
+  hide-default-footer
+)
+  template(#default="props")
+    v-row
+      v-col(
+        v-for="item in props.items"
+        :key="item.eventId"
+        v-if="item.attendanceList.length"
+        cols="12"
+        lg="3"
       )
-        span(class="mr-4 grey--text") Страница {{ page }} из {{ numberOfPages }}
-        v-btn(
-          fab dark color="primary" class="mr-1"
-          @click="formerPage"
-        )
-          v-icon mdi-chevron-left
-        v-btn(
-          fab dark color="primary" class="ml-1"
-          @click="nextPage"
-        )
-          v-icon mdi-chevron-right
+        v-card
+          v-card-title
+            span {{ item.start | dateParse('YYYY-MM-DD') | dateFormat('dddd, MMMM DD') }}
+          v-divider
+          v-list
+            v-list-item(dense)
+              v-list-item-content Отсутствовали:
+                v-list-item-subtitle(
+                  v-for="(student, index) in item.attendanceList"
+                  :key="index"
+                  ) {{ getStundenName(student.studentId) }} ({{ student.group | shortGroupName }}) — {{ student.reason | lowerCase }}
+
+  template(#footer)
+    v-row(
+      class="mt-2 mb-4" align="center" justify="end"
+    )
+      span(class="mr-4 grey--text") Страница {{ page }} из {{ numberOfPages }}
+      v-btn(
+        fab dark color="primary" class="mr-1"
+        @click="formerPage"
+      )
+        v-icon mdi-chevron-left
+      v-btn(
+        fab dark color="primary" class="ml-1"
+        @click="nextPage"
+      )
+        v-icon mdi-chevron-right
+    v-divider
 </template>
 
 <script>
-// import { groups } from '../../constants'
-
 export default {
   name: 'AttendanceWidget',
 

@@ -20,7 +20,7 @@
         strong {{ value }}
 
       template(#item.dateOfBirthday="{ value }")
-        div {{ value }}
+        div {{ value | dateParse('YYYY-MM-DD') | dateFormat('DD.MM.YYYY') }}
 
       template(#item.parents="{ value }")
         .mt-2.mb-2(

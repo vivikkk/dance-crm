@@ -22,7 +22,7 @@ v-container
       cols="12"
       lg="8"
     )
-      h1 Ученики и их родители
+      h1.display-2 Ученики и их родители
       v-switch(
         v-model="showAllColumns"
         label="Показать все колонки"

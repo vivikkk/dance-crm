@@ -97,7 +97,7 @@ export default {
       studentReason: null,
       selectedTab: 1,
       selectedTabDate: null,
-      today: new Date().toISOString().substr(0, 7)
+      today: new Date().toISOString().substring(0, 7)
     }
   },
 

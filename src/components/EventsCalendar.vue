@@ -1,188 +1,188 @@
 <template lang="pug">
-  div
-    v-sheet(height="64")
-      v-toolbar(
-        flat color="white"
+div
+  v-sheet(height="64")
+    v-toolbar(
+      flat color="white"
+    )
+      v-btn(
+        outlined color="grey darken-2 mr-4"
+        @click="setToday"
+      ) Сегодня
+      v-btn(
+        fab text small color="grey darken-2"
+        @click="prev"
       )
-        v-btn(
-          outlined color="grey darken-2 mr-4"
-          @click="setToday"
-        ) Сегодня
-        v-btn(
-          fab text small color="grey darken-2"
-          @click="prev"
-        )
-          v-icon(small) mdi-chevron-left
-        v-btn(
-          fab text small color="grey darken-2"
-          @click="next"
-        )
-          v-icon(small) mdi-chevron-right
-        v-toolbar-title {{ title }}
-        v-spacer
-        v-menu(
-          bottom right
-        )
-          template(#activator="{ on }")
-            v-btn(
-              outlined color="grey darken-2"
-              v-on="on"
-            )
-              span {{ typeToLabel[type] }}
-              v-icon(right) mdi-menu-down
-          v-list
-              v-list-item(
-                @click="type = 'week'"
-              )
-                v-list-item-title Неделя
-              v-list-item(
-                @click="type = 'month'"
-              )
-                v-list-item-title Месяц
-
-    v-sheet(height="600")
-      v-progress-linear(
-        v-if="loading"
-        indeterminate
-        dark flat color="blue darken-2"
+        v-icon(small) mdi-chevron-left
+      v-btn(
+        fab text small color="grey darken-2"
+        @click="next"
       )
-      v-calendar(
-        ref="calendar"
-        v-model="focus"
-        color="primary"
-        :events="events"
-        :event-color="getEventColor"
-        :now="today"
-        :type="type"
-        @click:event="showEvent"
-        @click:more="viewDay"
-        @click:date="viewDay"
-        @change="updateRange"
-      )
-
+        v-icon(small) mdi-chevron-right
+      v-toolbar-title {{ title }}
+      v-spacer
       v-menu(
-        v-model="selectedOpen"
-        :close-on-content-click="false"
-        :activator="selectedElement"
-        offset-x
+        bottom right
       )
-        v-card(
-          color="grey lighten-4" max-width="550px" min-width="350px" flat
-        )
-          v-toolbar(
-            dark
-            :color="getEventColor(selectedEvent)"
+        template(#activator="{ on }")
+          v-btn(
+            outlined color="grey darken-2"
+            v-on="on"
           )
-            v-toolbar-title {{ selectedEvent.name }}
-            v-spacer
-            v-btn(
-              icon
-              @click="$emit('delete', selectedEvent.id)"
+            span {{ typeToLabel[type] }}
+            v-icon(right) mdi-menu-down
+        v-list
+            v-list-item(
+              @click="type = 'week'"
             )
-              v-icon mdi-trash-can-outline
-          v-card-text
-            v-form(
-              v-model="valid"
-              ref="form"
-              lazy-validation
+              v-list-item-title Неделя
+            v-list-item(
+              @click="type = 'month'"
             )
-              v-select(
-                label="Тип занятия"
-                v-model="selectedEvent.name"
-                :items="typesEvents"
-              )
-              v-select(
-                label="Группа"
-                v-model="selectedEvent.group"
-                multiple
-                :items="groups"
-                :rules="[() => !!selectedEvent.group.length || 'Обязательное поле']"
-              )
-              v-text-field(
-                label="Дополнительно"
-                v-model="selectedEvent.description"
-              )
+              v-list-item-title Месяц
 
-              v-menu(
-                ref="startTimeMenu"
-                v-model="startTimeMenu"
-                :close-on-content-click="false"
-                :return-value.sync="selectedEvent.start"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
+  v-sheet(height="600")
+    v-progress-linear(
+      v-if="loading"
+      indeterminate
+      dark flat color="blue darken-2"
+    )
+    v-calendar(
+      ref="calendar"
+      v-model="focus"
+      color="primary"
+      :events="events"
+      :event-color="getEventColor"
+      :now="today"
+      :type="type"
+      @click:event="showEvent"
+      @click:more="viewDay"
+      @click:date="viewDay"
+      @change="updateRange"
+    )
+
+    v-menu(
+      v-model="selectedOpen"
+      :close-on-content-click="false"
+      :activator="selectedElement"
+      offset-x
+    )
+      v-card(
+        color="grey lighten-4" max-width="550px" min-width="350px" flat
+      )
+        v-toolbar(
+          dark
+          :color="getEventColor(selectedEvent)"
+        )
+          v-toolbar-title {{ selectedEvent.name }}
+          v-spacer
+          v-btn(
+            icon
+            @click="$emit('delete', selectedEvent.id)"
+          )
+            v-icon mdi-trash-can-outline
+        v-card-text
+          v-form(
+            v-model="valid"
+            ref="form"
+            lazy-validation
+          )
+            v-select(
+              label="Тип занятия"
+              v-model="selectedEvent.name"
+              :items="typesEvents"
+            )
+            v-select(
+              label="Группа"
+              v-model="selectedEvent.group"
+              multiple
+              :items="groups"
+              :rules="[() => !!selectedEvent.group.length || 'Обязательное поле']"
+            )
+            v-text-field(
+              label="Дополнительно"
+              v-model="selectedEvent.description"
+            )
+
+            v-menu(
+              ref="startTimeMenu"
+              v-model="startTimeMenu"
+              :close-on-content-click="false"
+              :return-value.sync="selectedEvent.start"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            )
+              template(
+                #activator="{ on }"
               )
-                template(
-                  #activator="{ on }"
-                )
-                  v-text-field(
-                    v-model="selectedEvent.start"
-                    label="Начало события"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-on="on"
-                    :rules="[() => !!selectedEvent.start || 'Обязательное поле']"
-                  )
-                v-date-picker(
-                  no-title scrollable
+                v-text-field(
                   v-model="selectedEvent.start"
+                  label="Начало события"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-on="on"
+                  :rules="[() => !!selectedEvent.start || 'Обязательное поле']"
                 )
-                  v-spacer
-                  v-btn(
-                    text color="primary"
-                    @click="startTimeMenu = false"
-                  ) Отмена
-                  v-btn(
-                    text color="primary"
-                    @click="$refs.startTimeMenu.save(selectedEvent.start)"
-                  ) Ок
-
-              v-menu(
-                ref="endTimeMenu"
-                v-model="endTimeMenu"
-                :close-on-content-click="false"
-                :return-value.sync="selectedEvent.end"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
+              v-date-picker(
+                no-title scrollable
+                v-model="selectedEvent.start"
               )
-                template(
-                  #activator="{ on }"
-                )
-                  v-text-field(
-                    v-model="selectedEvent.end"
-                    label="Конец события"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-on="on"
-                    clearable
-                    @click:clear="selectedEvent.end = null"
-                  )
-                v-date-picker(
-                  no-title scrollable
-                  v-model="selectedEvent.end"
-                )
-                  v-spacer
-                  v-btn(
-                    text color="primary"
-                    @click="endTimeMenu = false"
-                  ) Отмена
-                  v-btn(
-                    text color="primary"
-                    @click="$refs.endTimeMenu.save(selectedEvent.end)"
-                  ) Ок
-
-              v-card-actions
                 v-spacer
                 v-btn(
-                  text color="secondary"
-                  @click="selectedOpen = false"
+                  text color="primary"
+                  @click="startTimeMenu = false"
                 ) Отмена
                 v-btn(
-                  text color="green"
-                  :disabled="!valid"
-                  @click="update"
-                ) Сохранить
+                  text color="primary"
+                  @click="$refs.startTimeMenu.save(selectedEvent.start)"
+                ) Ок
+
+            v-menu(
+              ref="endTimeMenu"
+              v-model="endTimeMenu"
+              :close-on-content-click="false"
+              :return-value.sync="selectedEvent.end"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            )
+              template(
+                #activator="{ on }"
+              )
+                v-text-field(
+                  v-model="selectedEvent.end"
+                  label="Конец события"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-on="on"
+                  clearable
+                  @click:clear="selectedEvent.end = null"
+                )
+              v-date-picker(
+                no-title scrollable
+                v-model="selectedEvent.end"
+              )
+                v-spacer
+                v-btn(
+                  text color="primary"
+                  @click="endTimeMenu = false"
+                ) Отмена
+                v-btn(
+                  text color="primary"
+                  @click="$refs.endTimeMenu.save(selectedEvent.end)"
+                ) Ок
+
+            v-card-actions
+              v-spacer
+              v-btn(
+                text color="secondary"
+                @click="selectedOpen = false"
+              ) Отмена
+              v-btn(
+                text color="green"
+                :disabled="!valid"
+                @click="update"
+              ) Сохранить
 </template>
 
 <script>

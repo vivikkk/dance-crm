@@ -6,6 +6,7 @@ import Login from '../views/Login'
 import Students from '../views/Students'
 import Events from '../views/Events'
 import Attendance from '../views/Attendance'
+import Tasks from '../views/Tasks'
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,11 @@ const routes = [
     path: '/attendance',
     name: 'Attendance',
     component: Attendance
+  },
+  {
+    path: '/tasks',
+    name: 'Tasks',
+    component: Tasks
   }
 ]
 

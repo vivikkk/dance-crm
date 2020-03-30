@@ -41,7 +41,7 @@ v-container
       cols="12"
       lg="8"
     )
-      h1 Календарь событий
+      h1.display-2 Календарь событий
       EventsCalendar(
         :events="events"
         :groups="groups"
