@@ -19,6 +19,11 @@ export default {
   actions: {
     setLoading ({ commit }, payload) {
       commit('loading', payload)
+    },
+    fetchAllData ({ dispatch }) {
+      dispatch('fetchStudents')
+      dispatch('fetchEvents')
+      dispatch('fetchAttendance')
     }
   },
 

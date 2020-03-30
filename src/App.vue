@@ -14,6 +14,9 @@ component(:is="layout")
 </template>
 
 <script>
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
 const defaultLayout = 'default-layout'
 const simpleLayout = 'simple-layout'
 
@@ -25,10 +28,12 @@ export default {
     }
   },
 
-  created () {
-    this.$store.dispatch('fetchStudents')
-    this.$store.dispatch('fetchEvents')
-    this.$store.dispatch('fetchAttendance')
+  mounted () {
+    const currentUser = firebase.auth().currentUser
+
+    if (currentUser) {
+      this.$store.dispatch('fetchAllData')
+    }
   },
 
   watch: {

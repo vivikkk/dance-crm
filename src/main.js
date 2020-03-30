@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import VueFilterDateFormat from 'vue-filter-date-format'
 import VueFilterDateParse from 'vue-filter-date-parse'
-import App from './App.vue'
+
 import './registerServiceWorker'
+import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+
 import firebase from 'firebase/app'
+import 'firebase/auth'
 
 import Simple from './layouts/Simple'
 import Default from './layouts/Default'
@@ -45,9 +48,15 @@ firebase.initializeApp({
   appId: '1:531510708455:web:f97599600642ef98e63a42'
 })
 
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
-}).$mount('#app')
+let app
+
+firebase.auth().onAuthStateChanged(() => {
+  if (!app) {
+    app = new Vue({
+      router,
+      store,
+      vuetify,
+      render: h => h(App)
+    }).$mount('#app')
+  }
+})

@@ -15,6 +15,13 @@ v-app
           v-icon {{ link.icon }}
         v-list-item-content
           v-list-item-title(v-text="link.title")
+      v-list-item(
+        @click="logout"
+      )
+        v-list-item-icon
+          v-icon mdi-exit
+        v-list-item-content
+          v-list-item-title Выйти
 
   div
     v-toolbar(dark flat color="primary")
@@ -33,8 +40,14 @@ v-app
           :key="link.title"
           :to="link.url"
         )
-          v-icon(left) {{link.icon}}
-          span {{link.title}}
+          v-icon(left) {{ link.icon }}
+          span {{ link.title }}
+        v-btn(
+          text
+          @click="logout"
+        )
+          v-icon(left) mdi-logout
+          span Выйти
 
   v-content
     slot
@@ -52,6 +65,13 @@ export default {
         { title: 'События', icon: 'mdi-calendar', url: '/events' },
         { title: 'Ученики', icon: 'mdi-face', url: '/students' }
       ]
+    }
+  },
+
+  methods: {
+    async logout () {
+      await this.$store.dispatch('logout')
+      this.$router.push('/login')
     }
   }
 }
