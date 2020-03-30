@@ -1,7 +1,6 @@
 <template lang="pug">
   v-container(fluid)
     v-dialog(
-      v-if="addEventDialog"
       v-model="addEventDialog"
       max-width="500px"
       persistent
@@ -16,7 +15,7 @@
       )
 
     v-dialog(
-      v-model="isLoading"
+      :value="loading"
       persistent
       width="300"
     )
@@ -31,9 +30,7 @@
             class="mb-0"
           )
 
-    v-row(
-      v-if="!isLoading"
-    )
+    v-row(v-if="!loading")
       v-col(cols="12")
         h1.mb-2.display-2 Таблица посещаемости
 
@@ -94,20 +91,7 @@ export default {
       groups: groups,
       colors: colors,
       typesEvents: typesEvents,
-      isLoading: true
-    }
-  },
-
-  mounted () {
-    this.isLoading = this.loading
-  },
-
-  watch: {
-    loading (newValue, oldValue) {
-      this.isLoading = true
-      setTimeout(() => {
-        this.isLoading = false
-      }, 500)
+      today: new Date().toISOString().substring(0, 10)
     }
   },
 
@@ -156,7 +140,7 @@ export default {
     },
     getDatesForTabs () {
       const datesToTabArr = []
-      const date = new Date(this.firstLessonDate)
+      const date = new Date(this.firstLessonDate || this.today)
 
       do {
         datesToTabArr.push(date.toISOString().substring(0, 7))

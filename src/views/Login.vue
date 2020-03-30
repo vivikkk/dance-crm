@@ -34,6 +34,8 @@ v-container(
           v-spacer
           v-btn(
             text color="primary"
+            :loading="loading"
+            :disabled="loading"
             @click="onSubmit"
           ) Войти
 </template>
@@ -44,6 +46,7 @@ export default {
 
   data () {
     return {
+      loading: false,
       valid: false,
       email: null,
       password: null
@@ -56,12 +59,10 @@ export default {
         email: this.email,
         password: this.password
       }
+      this.loading = true
 
-      try {
-        await this.$store.dispatch('login', loginForm)
-        this.$router.push('/')
-        this.$store.dispatch('fetchAllData')
-      } catch (error) {}
+      await this.$store.dispatch('login', loginForm)
+      this.$router.push('/')
     }
   }
 }

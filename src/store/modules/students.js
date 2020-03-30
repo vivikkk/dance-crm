@@ -22,6 +22,9 @@ export default {
       const index = state.map(item => item.id).indexOf(payload)
 
       state.splice(index, 1)
+    },
+    clearStudents (state) {
+      state.splice(0, state.length)
     }
   },
 
@@ -63,8 +66,6 @@ export default {
       }
     },
     async fetchStudents ({ commit }, payload) {
-      commit('loading', true)
-
       const resultStudents = []
 
       try {
@@ -80,7 +81,6 @@ export default {
           )
         })
         commit('loadStudents', resultStudents)
-        commit('loading', false)
       } catch (error) {
         commit('loading', false)
         throw error

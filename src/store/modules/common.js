@@ -20,10 +20,12 @@ export default {
     setLoading ({ commit }, payload) {
       commit('loading', payload)
     },
-    fetchAllData ({ dispatch }) {
-      dispatch('fetchStudents')
-      dispatch('fetchEvents')
-      dispatch('fetchAttendance')
+    async fetchAllData ({ commit, dispatch }) {
+      commit('loading', true)
+      await dispatch('fetchStudents')
+      await dispatch('fetchEvents')
+      await dispatch('fetchAttendance')
+      commit('loading', false)
     }
   },
 

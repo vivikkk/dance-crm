@@ -37,6 +37,11 @@ export default {
   },
 
   watch: {
+    loggedIn (newValue) {
+      if (newValue) {
+        this.$store.dispatch('fetchAllData')
+      }
+    },
     snackbarText (newValue, oldValue) {
       if (newValue) {
         this.text = newValue
@@ -51,6 +56,9 @@ export default {
     },
     snackbarText () {
       return this.$store.getters.snackbarText
+    },
+    loggedIn () {
+      return this.$store.getters.loggedIn
     }
   }
 }

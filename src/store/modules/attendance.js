@@ -52,12 +52,14 @@ export default {
         }
         return 0
       })
+    },
+    clearAttendance (state) {
+      state.splice(0, state.length)
     }
   },
 
   actions: {
     async fetchAttendance ({ commit }, payload) {
-      commit('loading', true)
       const resultAbsenteeList = []
 
       try {
@@ -86,7 +88,6 @@ export default {
           })
         })
         commit('loadAttendance', resultAbsenteeList)
-        commit('loading', false)
       } catch (error) {
         commit('loading', false)
         throw error

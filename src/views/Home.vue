@@ -1,7 +1,7 @@
 <template lang="pug">
 v-container
   v-dialog(
-    v-model="isLoading"
+    :value="loading"
     persistent
     width="300"
   )
@@ -16,7 +16,7 @@ v-container
           class="mb-0"
         )
 
-  v-row(v-if="!isLoading")
+  v-row(v-if="!loading")
     v-col(cols="12")
       h2.display-1 Посещаемость
       AttendanceWidget(
@@ -45,22 +45,12 @@ export default {
 
   data () {
     return {
-      isLoading: true,
       currentMonth: new Date().toISOString().substring(5, 7)
     }
   },
 
   mounted () {
-    this.isLoading = this.loading
-  },
-
-  watch: {
-    loading (newValue, oldValue) {
-      this.isLoading = true
-      setTimeout(() => {
-        this.isLoading = false
-      }, 500)
-    }
+    this.$store.commit('sortAttendanceEvents')
   },
 
   computed: {
@@ -68,7 +58,6 @@ export default {
       return this.$store.getters.loading
     },
     attendance () {
-      this.$store.commit('sortAttendanceEvents')
       return this.$store.getters.attendance
     },
     students () {

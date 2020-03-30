@@ -22,6 +22,9 @@ export default {
       const index = state.map(item => item.id).indexOf(payload)
 
       state.splice(index, 1)
+    },
+    clearEvents (state) {
+      state.splice(0, state.length)
     }
   },
 
@@ -72,7 +75,6 @@ export default {
     async fetchEvents ({ commit }, payload) {
       const resultEvents = []
 
-      commit('loading', true)
       try {
         const fbVal = await firebase.database().ref('events').once('value')
         const events = fbVal.val()
@@ -86,7 +88,6 @@ export default {
           )
         })
         commit('loadEvents', resultEvents)
-        commit('loading', false)
       } catch (error) {
         commit('loading', false)
         throw error
