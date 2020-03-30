@@ -27,11 +27,10 @@ export default {
 
   actions: {
     async createStudent ({ commit }, payload) {
-      const addedStudentText = 'Студент добавлен'
+      const snackbarText = 'Студент добавлен'
 
       commit('loading', true)
-      commit('setSnackbarText', addedStudentText)
-
+      commit('setSnackbarText', snackbarText)
       try {
         const student = await firebase.database().ref('students').push(payload)
 
@@ -47,15 +46,14 @@ export default {
       }
     },
     async updateStudent ({ commit }, payload) {
-      const updateStudentText = 'Данные студента обновлены'
+      const snackbarText = 'Данные студента обновлены'
 
       commit('loading', true)
-      commit('setSnackbarText', updateStudentText)
+      commit('setSnackbarText', snackbarText)
       try {
         await firebase.database().ref('students').child(payload.id).update({
           ...payload
         })
-
         commit('updateStudent', payload)
         commit('loading', false)
         commit('clearSnackbarText')
@@ -89,13 +87,12 @@ export default {
       }
     },
     async deleteStudent ({ commit }, payload) {
-      const removedStudentText = 'Студент удален'
+      const snackbarText = 'Студент удален'
 
       commit('loading', true)
-      commit('setSnackbarText', removedStudentText)
+      commit('setSnackbarText', snackbarText)
       try {
         await firebase.database().ref(`/students/${payload}`).remove()
-
         commit('deleteStudent', payload)
         commit('loading', false)
         commit('clearSnackbarText')

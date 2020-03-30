@@ -27,8 +27,10 @@ export default {
 
   actions: {
     async createEvent ({ commit, dispatch }, payload) {
-      commit('loading', true)
+      const snackbarText = 'Событие создано'
 
+      commit('loading', true)
+      commit('setSnackbarText', snackbarText)
       try {
         const event = await firebase.database().ref('events').push(payload)
 
@@ -37,7 +39,6 @@ export default {
             eventId: event.key,
             start: payload.start
           }
-
           dispatch('addAbsentEvent', obj)
         }
 
@@ -52,15 +53,17 @@ export default {
       }
     },
     async updateEvent ({ commit }, payload) {
-      commit('loading', true)
+      const snackbarText = 'Событие обновлено'
 
+      commit('loading', true)
+      commit('setSnackbarText', snackbarText)
       try {
         await firebase.database().ref('events').child(payload.id).update({
           ...payload
         })
-
         commit('updateEvent', payload)
         commit('loading', false)
+        commit('clearSnackbarText')
       } catch (error) {
         commit('loading', false)
         throw error
@@ -90,13 +93,16 @@ export default {
       }
     },
     async deleteEvent ({ commit, dispatch }, payload) {
-      commit('loading', true)
+      const snackbarText = 'Событие удалено'
 
+      commit('loading', true)
+      commit('setSnackbarText', snackbarText)
       try {
         await firebase.database().ref(`/events/${payload}`).remove()
         dispatch('deleteAbsentEvent', payload)
         commit('deleteEvent', payload)
         commit('loading', false)
+        commit('clearSnackbarText')
       } catch (error) {
         commit('loading', false)
         throw error
