@@ -43,7 +43,7 @@ v-container
       )
 
   v-btn(
-    class="btn" color="green" fab large bottom fixed right
+    class="btn" color="blue" fab large bottom fixed right
     @click="newStudentHandler"
   )
     v-icon(color="white") mdi-account-plus
@@ -138,7 +138,7 @@ export default {
       return this.isEditModal ? editModal : deleteModal
     },
     currentStudent () {
-      return this.$store.getters.studentById(this.studentId)
+      return this.$store.getters.studentById(this.studentId) || {}
     }
   },
 

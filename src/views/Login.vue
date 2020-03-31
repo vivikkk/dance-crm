@@ -54,7 +54,6 @@ export default {
 
   data () {
     return {
-      loading: false,
       email: null,
       password: null,
       valid: false,
@@ -68,6 +67,12 @@ export default {
     }
   },
 
+  computed: {
+    loading () {
+      return this.$store.getters.loading
+    }
+  },
+
   methods: {
     async onSubmit () {
       if (this.$refs.form.validate()) {
@@ -76,7 +81,6 @@ export default {
           password: this.password
         }
 
-        this.loading = true
         await this.$store.dispatch('login', loginForm)
         this.$router.push('/')
       }

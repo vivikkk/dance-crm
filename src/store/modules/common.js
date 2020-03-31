@@ -1,7 +1,9 @@
 export default {
   state: {
     loading: false,
-    snackbarText: null
+    snackbarText: null,
+    errorText: null,
+    error: false
   },
 
   mutations: {
@@ -13,6 +15,13 @@ export default {
     },
     clearSnackbarText (state) {
       state.snackbarText = null
+    },
+    setError (state, payload) {
+      state.error = true
+      state.errorText = payload
+    },
+    clearError (state) {
+      state.error = false
     }
   },
 
@@ -35,6 +44,12 @@ export default {
     },
     snackbarText (state) {
       return state.snackbarText
+    },
+    error (state) {
+      return state.error
+    },
+    errorText (state) {
+      return state.errorText
     }
   }
 }

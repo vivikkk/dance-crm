@@ -50,11 +50,17 @@ const colors = [
   'grey darken-1'
 ]
 
+const messages = {
+  'auth/user-not-found': 'Пользователь не найден',
+  'auth/wrong-password': 'Проверьте пароль'
+}
+
 export {
   globalVars,
   schools,
   groups,
   classes,
   colors,
-  typesEvents
+  typesEvents,
+  messages
 }

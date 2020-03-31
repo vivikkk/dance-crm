@@ -17,6 +17,8 @@ export default {
 
   actions: {
     async login ({ commit }, payload) {
+      commit('loading', true)
+      commit('clearError')
       const {
         email,
         password
@@ -25,8 +27,10 @@ export default {
       try {
         await firebase.auth().signInWithEmailAndPassword(email, password)
         commit('login')
+        commit('loading', false)
       } catch (error) {
         commit('loading', false)
+        commit('setError', error)
         throw error
       }
     },
@@ -38,7 +42,7 @@ export default {
         commit('clearStudents')
         commit('logout')
       } catch (error) {
-        commit('loading', false)
+        commit('setError', error)
         throw error
       }
     }

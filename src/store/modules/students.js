@@ -65,7 +65,7 @@ export default {
         throw error
       }
     },
-    async fetchStudents ({ commit }, payload) {
+    async fetchStudents ({ commit }) {
       const resultStudents = []
 
       try {
@@ -109,13 +109,9 @@ export default {
     },
     studentById (state) {
       return id => {
-        if (id) {
-          return state.find(obj => {
-            return obj.id === id
-          })
-        } else {
-          return {}
-        }
+        return state.find(obj => {
+          return obj.id === id
+        })
       }
     }
   }

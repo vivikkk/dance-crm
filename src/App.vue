@@ -3,11 +3,12 @@ component(:is="layout")
   router-view
 
   v-snackbar(
+    center
     v-model="snackbar"
-    left :timeout="5000"
+    :color="error ? 'error' : 'success'"
+    :timeout="5000"
   ) {{ text }}
     v-btn(
-      color="pink"
       text
       @click="snackbar = false"
     ) Закрыть
@@ -17,6 +18,8 @@ component(:is="layout")
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
+import { messages } from './constants'
+
 const defaultLayout = 'default-layout'
 const simpleLayout = 'simple-layout'
 
@@ -24,6 +27,7 @@ export default {
   data () {
     return {
       snackbar: false,
+      snackbarColor: 'snackbar',
       text: null
     }
   },
@@ -38,13 +42,18 @@ export default {
 
   watch: {
     loggedIn (newValue) {
-      if (newValue) {
-        this.$store.dispatch('fetchAllData')
-      }
+      if (newValue) this.$store.dispatch('fetchAllData')
     },
     snackbarText (newValue, oldValue) {
       if (newValue) {
         this.text = newValue
+        this.snackbar = true
+      }
+    },
+    error (newValue) {
+      if (newValue) {
+        const error = this.errorText || 'Что-то пошло не так'
+        this.text = messages[error.code]
         this.snackbar = true
       }
     }
@@ -59,6 +68,12 @@ export default {
     },
     loggedIn () {
       return this.$store.getters.loggedIn
+    },
+    error () {
+      return this.$store.getters.error
+    },
+    errorText () {
+      return this.$store.getters.errorText
     }
   }
 }

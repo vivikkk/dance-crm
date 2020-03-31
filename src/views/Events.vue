@@ -52,7 +52,7 @@ v-container
       )
 
   v-btn(
-    class="btn" color="green" fab large
+    class="btn" color="blue" fab large
     bottom fixed right
     @click="showAddEventDialog = true"
   )

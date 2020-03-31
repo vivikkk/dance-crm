@@ -34,7 +34,7 @@ v-card
                     v-col(cols="12" md="8")
                       v-text-field(
                         label="ФИО"
-                        v-model="currentStudent.name"
+                        v-model.trim="currentStudent.name"
                         :rules="[() => !!currentStudent.name || 'Обязательное поле']"
                       )
                     v-col(cols="12" md="4")
@@ -88,17 +88,17 @@ v-card
                   v-col(cols="12")
                     v-text-field(
                       label="Мама"
-                      v-model="currentStudent.parents.mother"
+                      v-model.trim="currentStudent.parents.mother"
                     )
                   v-col(cols="12")
                     v-text-field(
                       label="Папа"
-                      v-model="currentStudent.parents.father"
+                      v-model.trim="currentStudent.parents.father"
                     )
                   v-col(cols="12")
                     v-text-field(
                       label="Бабушка"
-                      v-model="currentStudent.parents.grandMother"
+                      v-model.trim="currentStudent.parents.grandMother"
                     )
 
               v-stepper-content(:step="3")
@@ -111,22 +111,22 @@ v-card
                   v-col(cols="12" md="4")
                     v-text-field(
                       label="Телефон мамы"
-                      v-model="currentStudent.phones.mother"
+                      v-model.trim="currentStudent.phones.mother"
                     )
                   v-col(cols="12" md="4")
                     v-text-field(
                       label="Телефон папы"
-                      v-model="currentStudent.phones.father"
+                      v-model.trim="currentStudent.phones.father"
                     )
                   v-col(cols="12")
                     v-text-field(
                       label="Адрес ребенка"
-                      v-model="currentStudent.adress.student"
+                      v-model.trim="currentStudent.adress.student"
                     )
                   v-col(cols="12")
                     v-text-field(
                       label="Адрес родителей"
-                      v-model="currentStudent.adress.parents"
+                      v-model.trim="currentStudent.adress.parents"
                     )
 
     v-card-actions
