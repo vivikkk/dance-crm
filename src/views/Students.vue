@@ -20,7 +20,9 @@ v-container
   )
     v-col(
       cols="12"
-      lg="8"
+      md="12"
+      lg="10"
+      xlg="10"
     )
       h1.display-2 Ученики и их родители
       v-switch(
@@ -33,7 +35,9 @@ v-container
   )
     v-col(
       cols="12"
-      lg="8"
+      md="12"
+      lg="10"
+      xlg="10"
     )
       StudentsTable(
         :headers="computedHeaders"
