@@ -1,5 +1,5 @@
 <template lang="pug">
-v-container
+v-container(fluid)
   v-dialog(
     v-model="dialog"
     :max-width="`${this.isEditModal ? '800px' : '400px'}`"
@@ -22,7 +22,6 @@ v-container
       cols="12"
       md="12"
       lg="10"
-      xlg="10"
     )
       h1.display-2 Ученики и их родители
       v-switch(
@@ -37,7 +36,6 @@ v-container
       cols="12"
       md="12"
       lg="10"
-      xlg="10"
     )
       StudentsTable(
         :headers="computedHeaders"

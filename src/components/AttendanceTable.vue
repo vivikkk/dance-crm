@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   v-tabs(
-    v-model="selectedTab"
+    v-model="selectedTabIndex"
     background-color="primary"
     center-active
     dark
@@ -95,14 +95,25 @@ export default {
       selectedDate: null,
       selectedStudent: null,
       studentReason: null,
-      selectedTab: 0,
+      selectedTabIndex: 0,
       selectedTabDate: null,
       month: new Date().toISOString().substring(0, 7)
     }
   },
 
   mounted () {
-    this.selectedTabDate = this.tabs[0]
+    // TODO: WTF
+    const checkMonthIncludeInTabsArray = this.tabs.includes(this.month)
+
+    if (checkMonthIncludeInTabsArray) {
+      this.selectedTabDate = this.month
+      this.selectedTabIndex = this.tabs.indexOf(this.month)
+    } else {
+      const prevMonth = this.getPrevMonth(this.month)
+
+      this.selectedTabDate = prevMonth
+      this.selectedTabIndex = this.tabs.indexOf(prevMonth)
+    }
   },
 
   computed: {
@@ -133,6 +144,12 @@ export default {
   methods: {
     setDatesRange (date) {
       this.selectedTabDate = date
+    },
+    getPrevMonth (date) {
+      const prevMonth = new Date(date)
+
+      prevMonth.setMonth(prevMonth.getMonth() - 1)
+      return prevMonth.toISOString().substring(0, 7)
     },
     getNextMonth (date) {
       const nextMonth = new Date(date)
