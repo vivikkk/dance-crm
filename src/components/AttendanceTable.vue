@@ -95,15 +95,14 @@ export default {
       selectedDate: null,
       selectedStudent: null,
       studentReason: null,
-      selectedTab: 1,
+      selectedTab: 0,
       selectedTabDate: null,
-      today: new Date().toISOString().substring(0, 7)
+      month: new Date().toISOString().substring(0, 7)
     }
   },
 
   mounted () {
-    this.selectedTabDate = this.today
-    this.selectedTab = this.tabs.indexOf(this.today)
+    this.selectedTabDate = this.tabs[0]
   },
 
   computed: {
