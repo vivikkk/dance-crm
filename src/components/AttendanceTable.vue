@@ -159,17 +159,21 @@ export default {
     },
     getCellContent (studentId, dateId) {
       const absentEvent = this.$store.getters.absentEvent(dateId)
-      const absentStudent = absentEvent.attendanceList.find(item => item.studentId === studentId)
 
-      if (absentStudent) {
-        return absentStudent.reason
+      if (absentEvent) {
+        const absentStudent = absentEvent.attendanceList.find(item => item.studentId === studentId)
+
+        return absentStudent ? absentStudent.reason : null
       }
+      return false
     },
     checkStudentAttendance (studentId, dateId) {
       const absentEvent = this.$store.getters.absentEvent(dateId)
-      const absentStudent = absentEvent.attendanceList.find(item => item.studentId === studentId)
 
-      return !!absentStudent
+      if (absentEvent) {
+        return !!absentEvent.attendanceList.find(item => item.studentId === studentId)
+      }
+      return false
     },
     clickCellHandler (nativeEvent, student, date) {
       const absentEvent = this.$store.getters.absentEvent(date.id)

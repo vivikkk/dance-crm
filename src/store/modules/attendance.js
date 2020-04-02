@@ -39,7 +39,7 @@ export default {
         event.attendanceList.splice(index, 1)
       }
     },
-    addAbsentStudent (state, payload) {
+    createAbsentEvent (state, payload) {
       state.push(payload)
     },
     sortAttendanceEvents (state) {
@@ -101,7 +101,7 @@ export default {
           ...payload
         })
 
-        commit('addAbsentStudent', {
+        commit('createAbsentEvent', {
           ...payload,
           id: event.key,
           attendanceList: []
